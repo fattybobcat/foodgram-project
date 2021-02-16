@@ -2,6 +2,7 @@
 {% url 'add_recipes_url' as add_recipes_url %}
 {% url 'index_url' as index_url %}
 {% url 'favorites_url' as favorites_url %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,8 +15,15 @@
     {% block css %}<link rel="stylesheet" href="{% static 'pages/form.css' %}">{% endblock %}
 </head>
 <body class="body">
+    {% include 'header.html' %}
+	<main class="main container">
 
-	{% include 'includes/footer.html' %}
+	    	{% block content %}
+
+	        {% endblock %}
+
+	</main>
+	{% include 'footer.html' %}
 	{% block JS %}{% endblock %}
 </body>
 </html>

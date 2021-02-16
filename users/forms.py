@@ -23,3 +23,16 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ("first_name", "username", "email")
         required_fields = ("first_name", "username", "email")
+
+class UserRegistrationForm(forms.ModelForm):
+    """ Форма регистрации пользователя. """
+    email = forms.EmailField(max_length=200)
+    username = forms.CharField(max_length=150, label='Логин')
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Повтор пароля', widget=forms.PasswordInput)
+    error_css_class = 'error'
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'password2')
