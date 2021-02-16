@@ -21,10 +21,10 @@ def register(request):
             new_user.save()
             new_user.refresh_from_db()
 
-            return render(request, 'signup.html', {'new_user': new_user})
+            return render(request, 'reg.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
 
-    return render(request, 'signup.html', {
+    return render(request, 'reg.html', {
         'user_form': user_form,
     })
