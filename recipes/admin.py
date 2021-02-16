@@ -12,11 +12,11 @@ class RecipeAdmin(admin.ModelAdmin):
 
 class IngredientAdmin(admin.ModelAdmin):
     # перечисляем поля, которые должны отображаться в админке
-    list_display = ("title", "dimension")
+    list_display = ("name", "dimension")
     # добавляем интерфейс для поиска по тексту постов
-    search_fields = ("title",)
+    search_fields = ("name",)
     # добавляем возможность фильтрации по дате
-    list_filter = ("title",)
+    list_filter = ("name",)
     empty_value_display = "-пусто-"
 
 admin.site.register(Recipe, RecipeAdmin)

@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 # Возможные варианты выбора для поля tags
 
-TAG_CHOICES = (("breakfast", "Завтрак"),
+TAGS = (("breakfast", "Завтрак"),
                ("lunch", "Обед"),
                ("dinner", "Ужин"))
 
@@ -42,9 +42,10 @@ class Recipe(models.Model):
         verbose_name = 'Рецепты'
         verbose_name_plural = 'Рецепты'
 
+
 class Ingredient(models.Model):
     """Ингредиенты"""
-    title = models.CharField(max_length=300,
+    name = models.CharField(max_length=300,
                              verbose_name="Название ингредиента",
                              )
     dimension = models.CharField(max_length=30,
