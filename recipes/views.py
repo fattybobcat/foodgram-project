@@ -29,19 +29,23 @@ def index(request):
 @login_required
 def new_recipe(request):
     """Create new recipe"""
-    headline = 'Создание рецепта'
-    new_recipes = True
+    headline = "Создание рецепта"
+    button = "Создать рецепт"
+   # new_recipes = True
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == "POST":
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
+            print("Ok!!!!!")
             return redirect('recipes:index')
     form = RecipeForm()
     return render(request,
                   'recipeNew.html',
                   {form: form,
                    'headline': headline,
-                   'new_recipe': new_recipe,}
+               #    'new_recipe': new_recipe,
+                   "button": button,
+                   }
                   )

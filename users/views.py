@@ -1,12 +1,10 @@
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from .forms import RegisterForm, CreationForm
-from django.shortcuts import get_object_or_404, render, redirect
+from .forms import CreationForm
 
 
 class SignUp(CreateView):
     form_class = CreationForm
-   # success_url = reverse_lazy("login")
-    success_url = '/auth/login'
+    success_url = reverse_lazy("login")
     template_name = "reg.html"
 
