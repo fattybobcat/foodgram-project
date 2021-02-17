@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+#from multiselectfield import MultiSelectField
 # Create your models here.
 
 User = get_user_model()
@@ -20,7 +21,9 @@ class Recipe(models.Model):
     title = models.CharField(max_length=300,
                              verbose_name="Название рецепта",
                              )
-    description = models.TextField(verbose_name="Описание")
+    description = models.TextField(max_length=4000,
+                                   verbose_name="Описание"
+                                   )
     pub_date = models.DateTimeField("Дата добавления",
                                     auto_now_add=True,
                                     db_index=True
@@ -30,7 +33,7 @@ class Recipe(models.Model):
                               null=True,
                               verbose_name="Изображение",
                               )
-
+   # tag = MultiSelectField(choices=TAGS, verbose_name=_('Тег'))
     time = models.PositiveIntegerField(verbose_name="Время приготовления")
     slug = models.SlugField(unique=True)
 

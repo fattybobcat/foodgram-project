@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load addclass %}
-
 {% block title %}Регистрация{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'pages/form.css' %}">{% endblock %}
+    {% load static %}
+    {% load addclass %}
+    {% block static %}
+        <link rel="stylesheet" href="{% static 'pages/form.css' %}">
+    {% endblock %}
 
-{% block content %}
-<div class="main__header">
-  <h1 class="main__title">Регистрация</h1>
-</div>
+
+    {% block content %}
+    <div class="main__header">
+        <h1 class="main__title">Регистрация</h1>
+    </div>
     <div class="form-container">
         <form class="form" method="post">
             {% csrf_token %}
             {% for field in form %}
-
                 <div class="form__group">
                     <label for="id_first_name" class="form__label">{{ field.label }}</label>
                     <div class="form__field-group">
@@ -21,7 +22,6 @@
                         {% if field.errors %}<span class="form__error">{{ field.errors }}</span>{% endif %}
                     </div>
                 </div>
-
             {% endfor %}
 
             <div class="form__footer">
