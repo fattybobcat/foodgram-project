@@ -22,10 +22,11 @@ from django.conf.urls import handler404, handler500
 from django.conf.urls.static import static
 from django.conf import settings
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('', include('recipes.urls')),
     path("auth/", include("users.urls")),
-    #path('auth/', include('django.contrib.auth.urls')),
+    path("admin/", admin.site.urls),
+    #path("", include("api.urls")),
+    path("", include('recipes.urls')),
+    path("api/", include("api.urls")),
 ]
 
 if settings.DEBUG:

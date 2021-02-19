@@ -1,14 +1,14 @@
-from django.forms import ModelForm
-from django.forms.widgets import CheckboxSelectMultiple
-
+from django import forms
 from .models import Recipe
 
-class RecipeForm(ModelForm):
+class RecipeForm(forms.ModelForm):
+   # tags = ModelMultipleChoiceField(queryset=Tag.objects.all())
+
     class Meta:
         model = Recipe
-        fields = ["title", "description", "time", "image"]# "tag",
+        fields = ["title", "tags", "time", "description", "image"]
 
-      #  widgets = {
-      #      "tag": CheckboxSelectMultiple(),
-      #  }
+        widgets = {
+           "tags": forms.CheckboxSelectMultiple(),
+        }
 

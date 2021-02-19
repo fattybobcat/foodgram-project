@@ -4,8 +4,3 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
-class RoleUser(models.TextChoices):
-    USER = "user", _("user")
-    GUEST = "guest", _("guest")
-    ADMIN = "admin", _("admin")
-

@@ -1,14 +1,37 @@
 import json
 from django.core.paginator import Paginator
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.generic import View
 from django.shortcuts import render
-from django.http import HttpResponse
 from .form import RecipeForm
 from .models import (
     Ingredient,
     Recipe,
 )
+
+
+
+
+
+# def get_ingredients(request):
+#     ing_dict = {}
+#     for key in request.POST:
+#         if key.startswith('nameIngredient'):
+#             value = key[15:]
+#             ing_dict[request.POST[key]] = request.POST['valueIngredient_' + value]
+#     return ing_dict
+#
+# class Ingredients(View):
+#     """
+#     Фильтрация ингредиентов по GET запросу от js
+#     """
+#     def get(self, request):
+#         ingredient = request.GET['query']
+#         ingredients = list(Ingredient.objects.filter(
+#             title__icontains=ingredient).values('title', 'dimension'))
+#         return JsonResponse(ingredients, safe=False)
 
 
 def index(request):
@@ -26,26 +49,48 @@ def index(request):
                                           'page': page,
                                           'paginator': paginator, })
 
-@login_required
+
 def new_recipe(request):
     """Create new recipe"""
     headline = "Создание рецепта"
     button = "Создать рецепт"
-   # new_recipes = True
     form = RecipeForm(request.POST or None, files=request.FILES or None)
+    print(form.data)
+    print(form.is_valid())
+    print(form.errors)
+    ingredients_names = request.POST.getlist('nameIngredient')
+    ingredients_values = request.POST.getlist('valueIngredient')
+    #print(ingredients_names)
+    #print(ingredients_values)
+    print("Table")
+    print(form.as_table())
+    print(form.instance)
     if request.method == "POST":
+        print("!NO!")
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
+
             recipe.save()
             print("Ok!!!!!")
             return redirect('recipes:index')
+        print("!NO!")
     form = RecipeForm()
     return render(request,
-                  'recipeNew.html',
-                  {form: form,
-                   'headline': headline,
+                  "formRecipe.html",
+                  {"form": form,
+                   "headline": headline,
                #    'new_recipe': new_recipe,
                    "button": button,
                    }
                   )
+
+def shopping_list(request):
+    pass
+
+def follow_index(request):
+    pass
+
+def favorites(request):
+    pass
+
