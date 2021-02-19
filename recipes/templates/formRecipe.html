@@ -27,63 +27,34 @@
 
             </div>
 
-            <div class="form__group">
-                <p class="form__label">Теги</p>
-                <div class="form__field-group">
-                    <div class="tags">
-                        <div class="tags__item">
-                            <input type="checkbox" name="breakfast" id="id_breakfast" class="tags__checkbox tags__checkbox_style_orange" {% if is_breakfast %}checked{% endif %}>
-                            <label for="id_breakfast" class="tags__label">Завтрак</label>
-                        </div>
-                        <div class="tags__item">
-                            <input type="checkbox" name="lunch" id="id_lunch" class="tags__checkbox tags__checkbox_style_green" checked>
-                            <label for="id_lunch" class="tags__label">Обед</label>
-                        </div>
-                        <div class="tags__item">
-                            <input type="checkbox" name="dinner" id="id_dinner" class="tags__checkbox tags__checkbox_style_purple" checked>
-                            <label for="id_dinner" class="tags__label">Ужин</label>
-                        </div>
-                    </div>
-                    <span class="form__error"></span>
-                </div>
-            </div>
-
-
-
 
             <div class="form__group">
-                <p class="form__label">Теги</p>
-                <div class="form__field-group">
-                    <div class="tags">
-                        {{ request.path }}
-                        {{ tag }}
-                        form.tag.field.choices
-                        {{ form.tags.data }}
-                        абракадабра
-                        {% for tag_choice, tag_title in form.tags.field.choices %}
-                            tag_choice {{ tag_choice  }}
-                            tag_title {{ tag_title  }}
-                        <div class="tags__item">
-                            {{ tags }}
-                            {{ tag_choice.data }}
-                            {{ tag_choice.instance.name  }}
-                            {{ tag_title.id_for_label }}
-                            {{ tag_title.instance  }}
-                            {{ tag_title.data }}
-                            {{ tag_title.color }}
-                            <div class="tags__item">
-                                <input type="checkbox" name="tag" value ="{{ cc.instance.pk }}" id="id_{{ cc.instance.name }}" class="tags__checkbox tags__checkbox_style_{{ checkbox.instance.color }}">
-                                <label for="id_{{ cc.instance.name }}" class="tags__label">{{ cc.value }}</label>
-                                     {{ choice.choices }}
-                                    {{ choice.tags.name }}
-                            </div>
-
-                        </div>
-                        {% endfor %}
+            <p class="form__label">Теги</p>
+            <div class="form__field-group">
+                <div class="tags">
+                    <div class="tags__item">
+                        <input type="checkbox" name="tags" value="breakfast" id="id_breakfast"
+                            class="tags__checkbox tags__checkbox_style_orange" {% if is_breakfast %}checked{% endif %}>
+                        <label for="id_breakfast" class="tags__label">Завтрак</label>
                     </div>
-                    <span class="form__error"></span>
+                    <div class="tags__item">
+                        <input type="checkbox" name="tags" value="lunch" id="id_lunch"
+                            class="tags__checkbox tags__checkbox_style_green" {% if is_lunch %}checked{% endif %}>
+                        <label for="id_lunch" class="tags__label">Обед</label>
+                    </div>
+                    <div class="tags__item">
+                        <input type="checkbox" name="tags" value="dinner" id="id_dinner"
+                            class="tags__checkbox tags__checkbox_style_purple" {% if is_dinner %}checked{% endif %}>
+                        <label for="id_dinner" class="tags__label">Ужин</label>
+                    </div>
                 </div>
+                <span class="form__error">{{ form.tags.errors }}</span>
             </div>
+        </div>
+
+
+
+
 
             <div class="form__group">
                 <label for="nameIngredient" class="form__label">Ингредиенты</label>

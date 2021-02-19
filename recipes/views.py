@@ -63,7 +63,7 @@ def new_recipe(request):
     #print(ingredients_names)
     #print(ingredients_values)
     print("Table")
-    print(form.as_table())
+   # print(form.as_table())
     print(form.instance)
     if request.method == "POST":
         print("!NO!")

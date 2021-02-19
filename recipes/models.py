@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-#from multiselectfield import MultiSelectField
+from multiselectfield import MultiSelectField
 # Create your models here.
 
 User = get_user_model()
@@ -10,9 +10,6 @@ TAGS = (("breakfast", "Завтрак"),
                ("lunch", "Обед"),
                ("dinner", "Ужин"))
 
-TAGS_C = ("breakfast",
-          "lunch",
-          "dinner",)
 TAG_CHOICES = [
         ('breakfast', 'Завтрак'),
         ('lunch', 'Обед'),
@@ -24,6 +21,10 @@ tag_options = {
         'lunch': ['green', 'Обед'],
         'dinner': ['purple', 'Ужин']
     }
+
+TAGS_A = (("breakfast", ("Завтрак", "orange")),
+               ("lunch", ("Обед", "green")),
+               ("dinner", ("Ужин", "purple")))
 
 class Tags(models.Model):
     tag_options = {
@@ -53,15 +54,16 @@ class Tags(models.Model):
     @property
     def name(self):
         return self.tag_options[self.title][1]
-# class Tag(models.Model):
-#     title = models.CharField(max_length=20,
-#                              #choices=TAGS,
-#                              )
-#    # color = models.CharField(max_length=255)
-#     value = models.CharField(max_length=3)
-#
-#     def __str__(self):
-#         return self.title
+
+class Tag(models.Model):
+     title = models.CharField(max_length=255,
+                             #choices=TAGS,
+                              )
+     color = models.CharField(max_length=255)
+     value = models.CharField(max_length=255)
+
+     def __str__(self):
+         return self.title
 
 
 class Ingredient(models.Model):
@@ -120,9 +122,11 @@ class Recipe(models.Model):
                               null=True,
                               verbose_name="Изображение",
                               )
-    tags = models.ManyToManyField(Tags,
-                                 related_name="tags",
-                                 verbose_name=("Тег"))
+    tags = MultiSelectField(choices=TAG_CHOICES, blank=True,
+                            null=True, verbose_name="Теги")
+    # tags = models.ManyToManyField(Tag,
+    #                              related_name="tags",
+    #                              verbose_name=("Тег"))
 
     time = models.PositiveIntegerField(verbose_name="Время приготовления")
     ingredients = models.ManyToManyField(Ingredient,

@@ -31,3 +31,4 @@ psycopg2-binary==2.8.5
 pytz==2020.1
 flake8
 python-dotenv
+django-multiselectfield==0.1.12
