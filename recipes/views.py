@@ -93,9 +93,11 @@ class  EditRecipe(View):
 
         recipe = Recipe.objects.get(id=recipe_id)
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        ingredients = recipe.ingredients.all()
+        ingredients = recipe.amounts.all()
+        for i in ingredients:
+            print(i)
         print(ingredients)
-        print(recipe)
+        print(recipe.ingredients)
         if request.user != recipe.author:
             return redirect('index')
         form = RecipeForm(instance=recipe)
