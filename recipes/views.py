@@ -4,24 +4,24 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.generic import View
-from django.shortcuts import render
+from django.shortcuts import render#, redirect
 from .form import RecipeForm
 from .models import (
     Ingredient,
     Recipe,
+    IngredientAmount,
 )
 
 
-
-
-
-# def get_ingredients(request):
-#     ing_dict = {}
-#     for key in request.POST:
-#         if key.startswith('nameIngredient'):
-#             value = key[15:]
-#             ing_dict[request.POST[key]] = request.POST['valueIngredient_' + value]
-#     return ing_dict
+def get_ingredients(request):
+     ing_dict = {}
+     for key in request.POST:
+         if key.startswith('nameIngredient'):
+             value = key[15:]
+             ing_dict[request.POST[key]] = (request.POST['valueIngredient_' + value],
+                                            request.POST['unitsIngredient_' + value]
+                                            )
+     return ing_dict
 #
 # class Ingredients(View):
 #     """
@@ -45,6 +45,7 @@ def index(request):
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    print(recipe_list)
     return render(request, 'index.html', {'recipe_list': recipe_list,
                                           'page': page,
                                           'paginator': paginator, })
@@ -56,24 +57,25 @@ def new_recipe(request):
     button = "Создать рецепт"
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     print(form.data)
-    print(form.is_valid())
-    print(form.errors)
-    ingredients_names = request.POST.getlist('nameIngredient')
-    ingredients_values = request.POST.getlist('valueIngredient')
-    #print(ingredients_names)
-    #print(ingredients_values)
-    print("Table")
-   # print(form.as_table())
-    print(form.instance)
+    ingredients_names = get_ingredients(request)
+    print("ingredietn" , ingredients_names)
     if request.method == "POST":
-        print("!NO!")
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
-
+            #print("www", recipe.ingredients)
+            #recipe.ingredients = ingredients_names
             recipe.save()
+            for key in ingredients_names:
+                IngredientAmount.add_ingredient(
+                    IngredientAmount,
+                    recipe.id,
+                    key,
+                    ingredients_names[key][0]
+                )
+
             print("Ok!!!!!")
-            return redirect('recipes:index')
+            return redirect('index')
         print("!NO!")
     form = RecipeForm()
     return render(request,

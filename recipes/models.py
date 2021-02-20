@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from multiselectfield import MultiSelectField
-# Create your models here.
+from django.shortcuts import get_object_or_404
 
 User = get_user_model()
-# Возможные варианты выбора для поля tags
+
 
 TAGS = (("breakfast", "Завтрак"),
                ("lunch", "Обед"),
@@ -97,7 +97,11 @@ class IngredientAmount(models.Model):
                                on_delete=models.CASCADE,
                                related_name="amounts"
                                )
-
+    def add_ingredient(self, recipe_id, title, amount):
+        ingredient = get_object_or_404(Ingredient, title=title)
+        return self.objects.get_or_create(recipe_id=recipe_id,
+                                          ingredient=ingredient,
+                                          amount=amount)
 
 
 class Recipe(models.Model):
