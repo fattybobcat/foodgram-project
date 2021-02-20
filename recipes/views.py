@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.generic import View
-from django.shortcuts import render#, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .form import RecipeForm
 from .models import (
     Ingredient,
@@ -63,8 +63,6 @@ def new_recipe(request):
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
-            #print("www", recipe.ingredients)
-            #recipe.ingredients = ingredients_names
             recipe.save()
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
@@ -74,9 +72,7 @@ def new_recipe(request):
                     ingredients_names[key][0]
                 )
 
-            print("Ok!!!!!")
             return redirect('index')
-        print("!NO!")
     form = RecipeForm()
     return render(request,
                   "formRecipe.html",
@@ -85,6 +81,28 @@ def new_recipe(request):
                #    'new_recipe': new_recipe,
                    "button": button,
                    }
+                  )
+
+class  EditRecipe(View):
+    """ Form for Edit Recipe """
+   # pass
+    def get(self, request, recipe_id):
+        headline = "Редактирование рецепта"
+        button = "Редактировать рецепт"
+        print(request)
+
+        recipe = Recipe.objects.get(id=recipe_id)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        ingredients = recipe.ingredients.all()
+        print(ingredients)
+        print(recipe)
+        if request.user != recipe.author:
+            return redirect('index')
+        form = RecipeForm(instance=recipe)
+
+        return render(request,
+                  "formRecipe.html",
+                  context={'form': form, 'headline': headline}
                   )
 
 def shopping_list(request):

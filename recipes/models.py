@@ -6,10 +6,6 @@ from django.shortcuts import get_object_or_404
 User = get_user_model()
 
 
-TAGS = (("breakfast", "Завтрак"),
-               ("lunch", "Обед"),
-               ("dinner", "Ужин"))
-
 TAG_CHOICES = [
         ('breakfast', 'Завтрак'),
         ('lunch', 'Обед'),
@@ -21,10 +17,6 @@ tag_options = {
         'lunch': ['green', 'Обед'],
         'dinner': ['purple', 'Ужин']
     }
-
-TAGS_A = (("breakfast", ("Завтрак", "orange")),
-               ("lunch", ("Обед", "green")),
-               ("dinner", ("Ужин", "purple")))
 
 class Tags(models.Model):
     tag_options = {
@@ -126,8 +118,11 @@ class Recipe(models.Model):
                               null=True,
                               verbose_name="Изображение",
                               )
-    tags = MultiSelectField(choices=TAG_CHOICES, blank=True,
-                            null=True, verbose_name="Теги")
+    tags = MultiSelectField(choices=TAG_CHOICES,
+                            blank=True,
+                            null=True,
+                            verbose_name="Теги",
+                            )
     # tags = models.ManyToManyField(Tag,
     #                              related_name="tags",
     #                              verbose_name=("Тег"))
