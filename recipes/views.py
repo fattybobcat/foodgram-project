@@ -136,7 +136,7 @@ def recipe_delete(request, recipe_id):
 
 def recipe_single(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    return render(request, 'recipe.html', {'recipe': recipe})
+    return render(request, 'singlePage.html', {'recipe': recipe})
 
 
 def shopping_list(request):
