@@ -99,16 +99,14 @@
                 </div>
             </div>
             <div class="form__group">
-                <span class="form__label">Загрузить фото</span>
-                <div class="form__field-group">
-                    {{ form.image|addclass:"form__file-button" }}
-                    {% if form.errors %}
-                        {% for error in field.errors %}
-                            <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+            <span class="form__label">Загрузить фото</span>
+            <div class="form__field-group">
+                {{ form.image.widget }}
+                <input type="file" name="image" id="id_file" value="{{ form.image.value }}">
+                <span class="form__input-info">При редактировании фотография сохраняется</span>
+                <span class="form__error">{{ form.image.errors }}</span>
             </div>
+        </div>
             <div class="form__footer">
                 <button class="button button_style_blue">Создать рецепт</button>
             </div>

@@ -46,9 +46,9 @@ def new_recipe(request):
     headline = "Создание рецепта"
     button = "Создать рецепт"
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-    print(form.data)
+    #print(form.data)
     ingredients_names = get_ingredients(request)
-    print("ingredietn", ingredients_names)
+    #print("ingredietn", ingredients_names)
     if request.method == "POST":
         if form.is_valid():
             recipe = form.save(commit=False)
@@ -68,25 +68,20 @@ def new_recipe(request):
                   "formRecipe.html",
                   {"form": form,
                    "headline": headline,
-               #    'new_recipe': new_recipe,
                    "button": button,
                    }
                   )
 
 class  EditRecipe(View):
     """ Form for Edit Recipe """
+
     def get(self, request, recipe_id):
         headline = "Редактирование рецепта"
         button = "Редактировать рецепт"
         print(request)
-
-        #recipe = Recipe.objects.get(id=recipe_id)
         recipe = get_object_or_404(Recipe, id=recipe_id)
         ingredients = recipe.amounts.all()
-        for i in ingredients:
-            print(i)
-        print("a", ingredients)
-        print('B', recipe.amounts.all())
+        print("2", ingredients)
         if request.user != recipe.author:
             return redirect('index')
         form = RecipeForm(instance=recipe)
@@ -98,6 +93,47 @@ class  EditRecipe(View):
                            'recipe': recipe,
                            'ingredients': ingredients}
                   )
+
+    def post(self, request, recipe_id):
+        headline = "Редактирование рецепта"
+        button = "Редактировать рецепт"
+        print(request)
+        ingredients_names = get_ingredients(request)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+        #recipe.author = request.user
+        print(form.data)
+        if request.user != recipe.author:
+            return redirect('index')
+
+        if form.is_valid():
+            IngredientAmount.objects.filter(recipe=recipe).delete()
+
+            form.save()
+            for key in ingredients_names:
+                IngredientAmount.add_ingredient(
+                    IngredientAmount,
+                    recipe.id,
+                    key,
+                    ingredients_names[key][0]
+                )
+            print(ingredients_names)
+            return render(request,
+                  "editRecipe.html",
+                  context={'form': form,
+                           'headline': headline,
+                           'recipe': recipe,
+                           }
+                  )
+
+
+@login_required
+def recipe_delete(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if recipe.author == request.user:
+        recipe.delete()
+    return render(request, 'deleteRecipeDone.html')
+
 
 def shopping_list(request):
     pass
