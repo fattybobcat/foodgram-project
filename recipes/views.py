@@ -85,13 +85,12 @@ def new_recipe(request):
 
 class  EditRecipe(View):
     """ Form for Edit Recipe """
-   # pass
     def get(self, request, recipe_id):
         headline = "Редактирование рецепта"
         button = "Редактировать рецепт"
         print(request)
 
-        recipe = Recipe.objects.get(id=recipe_id)
+        #recipe = Recipe.objects.get(id=recipe_id)
         recipe = get_object_or_404(Recipe, id=recipe_id)
         ingredients = recipe.amounts.all()
         for i in ingredients:
