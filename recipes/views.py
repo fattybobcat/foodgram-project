@@ -22,16 +22,6 @@ def get_ingredients(request):
                                             request.POST['unitsIngredient_' + value]
                                             )
      return ing_dict
-#
-# class Ingredients(View):
-#     """
-#     Фильтрация ингредиентов по GET запросу от js
-#     """
-#     def get(self, request):
-#         ingredient = request.GET['query']
-#         ingredients = list(Ingredient.objects.filter(
-#             title__icontains=ingredient).values('title', 'dimension'))
-#         return JsonResponse(ingredients, safe=False)
 
 
 def index(request):
@@ -58,7 +48,7 @@ def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     print(form.data)
     ingredients_names = get_ingredients(request)
-    print("ingredietn" , ingredients_names)
+    print("ingredietn", ingredients_names)
     if request.method == "POST":
         if form.is_valid():
             recipe = form.save(commit=False)
@@ -71,7 +61,7 @@ def new_recipe(request):
                     key,
                     ingredients_names[key][0]
                 )
-
+            form.save_m2m()
             return redirect('index')
     form = RecipeForm()
     return render(request,
@@ -95,15 +85,18 @@ class  EditRecipe(View):
         ingredients = recipe.amounts.all()
         for i in ingredients:
             print(i)
-        print(ingredients)
-        print(recipe.ingredients)
+        print("a", ingredients)
+        print('B', recipe.amounts.all())
         if request.user != recipe.author:
             return redirect('index')
         form = RecipeForm(instance=recipe)
 
         return render(request,
-                  "formRecipe.html",
-                  context={'form': form, 'headline': headline}
+                  "editRecipe.html",
+                  context={'form': form,
+                           'headline': headline,
+                           'recipe': recipe,
+                           'ingredients': ingredients}
                   )
 
 def shopping_list(request):
