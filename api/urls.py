@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('ingredients', views.ingredient_hints, name='ingredient_hints'),
+    path("ingredients", views.ingredient_hints, name="ingredient_hints"),
+    #path("", )
 ]

@@ -17,8 +17,12 @@ def get_ingredients(request):
         title__contains=query).values("title", "dimension")
     return JsonResponse(list(ingredients), safe=False)
 
+
 def ingredient_hints(request):
     text = request.GET['query']
     ing_list = Ingredient.objects.filter(title__startswith=text).order_by('title')
     result = [{"title": item.title, "dimension": item.dimension} for item in ing_list]
     return JsonResponse(result, safe=False)
+
+#def favorites(request):
+ #

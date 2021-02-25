@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %} Создание рецепта {% endblock %}
+{% block title %} Создать аккаунт {% endblock %}
 {% load static %}
 {% load user_filter %}
 {% block head %}
-    {% include 'head.html' %}
+    {% include 'head.html' with login=True %}
 {% endblock %}
 {% load static %}
 {% block content %}

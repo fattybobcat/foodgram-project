@@ -2,9 +2,8 @@
 {% block title %} Создание рецепта {% endblock %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with new_recipe=True%}
+    {% include 'head.html' with recipe_new=True%}
 {% endblock %}
-{% load static %}
 {% block content %}
 {% load user_filter %}
 <link rel="stylesheet" href="{% static 'pages/form.css' %}">

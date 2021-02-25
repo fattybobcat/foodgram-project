@@ -6,6 +6,24 @@ from django.contrib.auth.decorators import login_required
 
 register = template.Library()
 
+@register.filter
+def get_recipe_tag(tags_list):
+    tags = ""
+    if "breakfast" in tags_list:
+        tags += str('<li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>')
+    if 'lunch' in tags_list:
+        tags += str('<li class="card__item"><span class="badge badge_style_green">Обед</span></li>')
+    if 'dinner' in tags_list:
+        tags += str('<li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>')
+    return tags
+
+@register.filter
+def get_description_new_lines(description_recipe):
+    description_list = description_recipe.split('\n')
+    description = ""
+    for i in range(len(description_list)):
+        description += str(f'<p class=" single-card__section-text">{description_list[i]}</p>')
+    return description
 
 @register.filter(name='get_filter_values')
 def get_filter_values(value):

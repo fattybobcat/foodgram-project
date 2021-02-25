@@ -35,7 +35,6 @@ def index(request):
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    print(recipe_list)
     return render(request, 'index.html', {'recipe_list': recipe_list,
                                           'page': page,
                                           'paginator': paginator, })
@@ -118,13 +117,16 @@ class  EditRecipe(View):
                     ingredients_names[key][0]
                 )
             print(ingredients_names)
-            return render(request,
-                  "editRecipe.html",
-                  context={'form': form,
-                           'headline': headline,
-                           'recipe': recipe,
-                           }
-                  )
+
+            return redirect('recipe_single', recipe_id=recipe_id)
+        return render(request,
+                      "singlePage.html",
+                      {'id': recipe.id,
+                       'headline': headline,
+                       'recipe': recipe,
+                       'ingredients': ingredients,
+                       }
+                      )
 
 
 @login_required
@@ -136,7 +138,13 @@ def recipe_delete(request, recipe_id):
 
 def recipe_single(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    return render(request, 'singlePage.html', {'recipe': recipe})
+    ingredients = recipe.amounts.all()
+    print(ingredients)
+    return render(request, "singlePage.html",
+                  {"recipe": recipe,
+                   "ingredients": ingredients,
+                   }
+                  )
 
 
 def shopping_list(request):
