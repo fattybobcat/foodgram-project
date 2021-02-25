@@ -1,10 +1,12 @@
 import json
 from django.shortcuts import redirect
+from rest_framework import generics
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 
 from recipes.models import Ingredient
-
+from .models import Follow
+from .serializers import FollowSerrializer
 
 SUCCESS_RESPONSE = JsonResponse({"success": True})
 FAIL_RESPONSE = HttpResponse()
@@ -24,5 +26,6 @@ def ingredient_hints(request):
     result = [{"title": item.title, "dimension": item.dimension} for item in ing_list]
     return JsonResponse(result, safe=False)
 
-#def favorites(request):
- #
+class FollowApi(generics.ListCreateAPIView, generics.DestroyAPIView):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerrializer

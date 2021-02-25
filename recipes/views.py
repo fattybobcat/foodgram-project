@@ -95,19 +95,15 @@ class  EditRecipe(View):
 
     def post(self, request, recipe_id):
         headline = "Редактирование рецепта"
-        button = "Редактировать рецепт"
         print(request)
         ingredients_names = get_ingredients(request)
         recipe = get_object_or_404(Recipe, id=recipe_id)
         form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
-        #recipe.author = request.user
         print(form.data)
         if request.user != recipe.author:
             return redirect('index')
-
         if form.is_valid():
             IngredientAmount.objects.filter(recipe=recipe).delete()
-
             form.save()
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
@@ -117,8 +113,8 @@ class  EditRecipe(View):
                     ingredients_names[key][0]
                 )
             print(ingredients_names)
-
             return redirect('recipe_single', recipe_id=recipe_id)
+
         return render(request,
                       "singlePage.html",
                       {'id': recipe.id,
@@ -149,6 +145,9 @@ def recipe_single(request, recipe_id):
 
 def shopping_list(request):
     pass
+
+# class FollowClass(LoginRequiredMixin, View):
+#     pass
 
 def follow_index(request):
     pass
