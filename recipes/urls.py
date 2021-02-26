@@ -12,6 +12,9 @@ urlpatterns = [
     path('follow/', views.follow_index, name="follow_index"),
     path('favorite', views.favorite, name="favorite_recipes"),
     path('shopping_list/', views.shopping_list, name="shopping_list"),
+    path('tech', views.tech, name='tech'),
+    path('about', views.about, name='about'),
 
     path('<username>/', views.profile, name='profile'),
+
 ]

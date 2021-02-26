@@ -190,3 +190,17 @@ def favorite(request):
                   {'recipe_list': recipe_list,
                    'page': page,
                    'paginator': paginator, })
+
+def about(request):
+    return render(request, "about.html")
+
+def tech(request):
+    return render(request, "technologii.html")
+
+def page_not_found(request, exception):
+    return render(request, "404.html", {"path": request.path}, status=404)
+
+
+def server_error(request):
+    return render(request, "500.html", status=500)
+

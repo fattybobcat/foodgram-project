@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Об авторе {% endblock %}
+
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main class="main container">
+        <div class="custom-center-block">
+                <p class="custom-text-block">
+                    Автор сайта: Aleksandr Petruk
+                    <a href="https://github.com/frolkit"> https://github.com/fattybobcat</a>
+                </p>
+            <div class="custom-button-block">
+                <a href="{% url 'index' %}"><button  class="button button_style_blue" >Перейти на главную</button></a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
