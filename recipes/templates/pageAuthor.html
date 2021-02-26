@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %} Избранные рецепты {% endblock title %}
+{% block title %} {{ recipes.author }} {% endblock title %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with favorite=True%}
+    {% include 'head.html' with index=True%}
 {% endblock %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">

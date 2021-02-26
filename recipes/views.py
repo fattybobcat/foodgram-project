@@ -145,6 +145,19 @@ def recipe_single(request, recipe_id):
                   )
 
 
+def profile(request, username):
+    username = get_object_or_404(User, author=username)
+    recipes = Recipe.objects.filter(author=username)
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request,
+                  'pageAuthor.html',
+                  {'recipes': recipes,
+                   'page': page,
+                   'paginator': paginator, }
+                  )
+
 def shopping_list(request):
     pass
 
