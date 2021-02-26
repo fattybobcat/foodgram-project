@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views import View
 from recipes.models import Ingredient, Recipe
-from .models import FavoriteRecipe, Follow
+from .models import FavoriteRecipe, Follow, Wishlist
 from django.shortcuts import get_object_or_404, render, redirect
 
 
@@ -60,4 +60,26 @@ class SubscriptionApi(LoginRequiredMixin, View):
             Follow, author=id, user=request.user
         )
         subscript.delete()
+        return JsonResponse({"success": True})
+
+
+class WishlistApi(View):
+    def post(self, request):
+        req = json.loads(request.body)
+        recipe_id = req.get("id", None)
+        if recipe_id:
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            obj, created = Wishlist.objects.get_or_create(
+                user=request.user, recipe=recipe
+            )
+            if created:
+                return JsonResponse({"success": True})
+            return JsonResponse({"success": False})
+        return JsonResponse({"success": False}, status=400)
+
+    def delete(self, request, id):
+        recipe = get_object_or_404(
+            Wishlist, recipe=id, user=request.user
+        )
+        recipe.delete()
         return JsonResponse({"success": True})

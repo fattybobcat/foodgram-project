@@ -46,15 +46,16 @@ def new_recipe(request):
     headline = "Создание рецепта"
     button = "Создать рецепт"
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-    #print(form.data)
+    print(form.data)
     ingredients_names = get_ingredients(request)
-    #print("ingredietn", ingredients_names)
+    print("ingredietn", ingredients_names)
     if request.method == "POST":
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
             print(recipe.id)
+            print('test', ingredients_names)
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
                     IngredientAmount,
@@ -62,6 +63,7 @@ def new_recipe(request):
                     key,
                     ingredients_names[key][0]
                 )
+            print("3sssss")
             form.save_m2m()
             return redirect('recipe_single', recipe_id=recipe.id)
     form = RecipeForm()
@@ -146,20 +148,29 @@ def recipe_single(request, recipe_id):
 
 
 def profile(request, username):
-    username = get_object_or_404(User, author=username)
+    username = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(author=username)
-    paginator = Paginator(recipe_list, 6)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request,
                   'pageAuthor.html',
                   {'recipes': recipes,
                    'page': page,
-                   'paginator': paginator, }
+                   'paginator': paginator,
+                   'username': username,
+                   }
                   )
 
 def shopping_list(request):
-    pass
+    shop_list = Recipe.objects.filter(
+        wishlist_recipe__user__id=request.user.id).all()
+    print(shop_list)
+    return render(request,
+                  'wishlist.html',
+                  {'shop_list': shop_list,
+                    }
+                  )
 
 
 def follow_index(request):

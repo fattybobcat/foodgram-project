@@ -43,7 +43,11 @@ class FavoriteRecipe(models.Model):
 
 class Wishlist(models.Model):
     """List wishlist ingredient of recipes"""
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="wishlist_subscriber")
-    recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, related_name="wishlist_recipe")
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             related_name="wishlist_subscriber",
+                             )
+    recipe = models.ForeignKey(Recipe,
+                               on_delete=models.CASCADE,
+                               related_name="wishlist_recipe",
+                               )

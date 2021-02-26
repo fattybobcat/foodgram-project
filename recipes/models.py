@@ -76,6 +76,7 @@ class Ingredient(models.Model):
 
 
 
+
 class IngredientAmount(models.Model):
     """Ингредиенты в рецепте"""
     amount = models.IntegerField(default=1,
@@ -90,7 +91,9 @@ class IngredientAmount(models.Model):
                                related_name="amounts"
                                )
     def add_ingredient(self, recipe_id, title, amount):
-        ingredient = get_object_or_404(Ingredient, title=title)
+        print('test3i', title, amount)
+        ingredient, create = Ingredient.objects.get_or_create(title=title)
+        print("title", ingredient)
         return self.objects.get_or_create(recipe_id=recipe_id,
                                           ingredient=ingredient,
                                           amount=amount)

@@ -51,3 +51,7 @@ def get_is_favorite(recipe, user):
 @register.filter
 def get_is_follow(recipe, user):
     return Follow.objects.filter(user=user, author=recipe.author).exists()
+
+@register.filter
+def get_is_follow2(author, user):
+    return Follow.objects.filter(user=user, author=author).exists()

@@ -1,4 +1,4 @@
-{% load recipes_tag_filter %}
+ {% load recipes_tag_filter %}
 {% load static %}
 <div class="card" data-id={{ recipe.id }}>
     {% if recipe.image %}
@@ -13,7 +13,7 @@
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{ recipe.time }}</p>
-            <p class="card__text"><span class="icon-user"></span> <a href="#" style="color: black">{{ recipe.author.username }}</a></p>
+            <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username %}" style="color: black">{{ recipe.author.username }}</a></p>
         </div>
     </div>
     <div class="card__footer">
