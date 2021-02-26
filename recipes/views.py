@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.views.generic import View
 from django.shortcuts import get_object_or_404, render, redirect
 from .form import RecipeForm
-from api.models import FavoriteRecipe
+from api.models import FavoriteRecipe, Follow
 from .models import (
     Ingredient,
     Recipe,
@@ -150,7 +150,21 @@ def shopping_list(request):
 
 
 def follow_index(request):
-    pass
+    follow_list = Follow.objects.filter(
+        user__id=request.user.id).all()
+    print(follow_list)
+    paginator = Paginator(follow_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request,
+                  'followPage.html',
+                  {'follow_list': follow_list,
+                   'page': page,
+                   'paginator': paginator, }
+                 )
+
+
+
 
 def favorite(request):
     recipe_list = Recipe.objects.filter(

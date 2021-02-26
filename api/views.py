@@ -2,16 +2,16 @@ import json
 from django.shortcuts import redirect
 from rest_framework import generics
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views import View
 from recipes.models import Ingredient, Recipe
-from .models import FavoriteRecipe
+from .models import FavoriteRecipe, Follow
 from django.shortcuts import get_object_or_404, render, redirect
 
 
 def ingredient_hints(request):
-    #text = request.GET['query']
     text = request.GET.get("query").lower()
     ing_list = Ingredient.objects.filter(title__startswith=text).order_by('title')
     result = [{"title": item.title, "dimension": item.dimension} for item in ing_list]
@@ -38,3 +38,26 @@ class FavoriteApi(LoginRequiredMixin, View):
          )
          recipe.delete()
          return JsonResponse({"success": True})
+
+
+class SubscriptionApi(LoginRequiredMixin, View):
+    def post(self, request):
+        req = json.loads(request.body)
+        author_id = req.get("id", None)
+        if author_id:
+            author = get_object_or_404(User, id=author_id)
+            obj, created = Follow.objects.get_or_create(
+                user=request.user,
+                author=author
+            )
+            if created:
+                return JsonResponse({"success": True})
+            return JsonResponse({"success": False})
+        return JsonResponse({"success": False}, status=400)
+
+    def delete(self, request, id):
+        subscript = get_object_or_404(
+            Follow, author=id, user=request.user
+        )
+        subscript.delete()
+        return JsonResponse({"success": True})

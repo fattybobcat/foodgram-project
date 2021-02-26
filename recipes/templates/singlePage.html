@@ -12,7 +12,7 @@
     {% csrf_token %}
     {% load user_filter %}
     {% load recipes_tag_filter %}
-        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{username.id}}">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{recipe.author.id}}">
         <!--    {% if recipe.image %} -->
                 <img src="{% get_media_prefix %}{{ recipe.image }}" alt={{ recipe.title }} class="single-card__image">
         <!--        <img src="{{ recipe.image.url }}" alt="Какой-то текст" class="single-card__image">
@@ -52,7 +52,11 @@
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% if request.user.is_authenticated %}
                         {% if request.user != recipe.author %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                            {% if recipe|get_is_follow:request.user %}
+                                <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe"><span class="icon-check button__icon"></span> Отписаться от автора </button>
+                            {% else %}
+                                <li class="single-card__item"><button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button></li>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </ul>

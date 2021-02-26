@@ -3,7 +3,7 @@ from django.http import QueryDict
 from django.contrib.auth.decorators import login_required
 
 #from recipes.models import Cart, Favorite
-from api.models import FavoriteRecipe
+from api.models import FavoriteRecipe, Follow
 
 register = template.Library()
 
@@ -47,3 +47,7 @@ def get_filter_link(request, tag):
 @register.filter
 def get_is_favorite(recipe, user):
     return FavoriteRecipe.objects.filter(user=user, recipe=recipe).exists()
+
+@register.filter
+def get_is_follow(recipe, user):
+    return Follow.objects.filter(user=user, author=recipe.author).exists()

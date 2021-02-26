@@ -4,7 +4,7 @@
             {% if request.user.is_authenticated %}
                 <ul class="nav__items list">
                     <li class="nav__item {% if index %} nav__item_active {% endif %}"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-                    <li class="nav__item {% if follow_index %} nav__item_active {% endif %}"><a href="{% url 'follow_index' %}" class="nav__link link"> Мои подписки</a></li>
+                    <li class="nav__item {% if follow %} nav__item_active {% endif %}"><a href="{% url 'follow_index' %}" class="nav__link link"> Мои подписки</a></li>
                     <li class="nav__item {% if recipe_new %}nav__item_active{% endif %}"><a href="{% url 'recipe_new' %}" class="nav__link link"> Создать рецепт</a></li>
                     <li class="nav__item {% if favorite %} nav__item_active {% endif %}"><a href="{% url 'favorite_recipes' %}" class="nav__link link"> Избранное</a></li>
                     <li class="nav__item {% if shopping_list %} nav__item_active {% endif %}"><a href="{% url 'shopping_list' %}" class="nav__link link"> Список покупок</a>
