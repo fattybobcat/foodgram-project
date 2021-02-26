@@ -4,9 +4,12 @@
 {% block head %}
     {% include 'head.html' with recipe_new=True%}
 {% endblock %}
+{% block static %}
+    <link rel="stylesheet" href={% static 'pages/form.css' %}>
+{% endblock %}
 {% block content %}
 {% load user_filter %}
-<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+
     <div class="main__header">
         <h1 class="main__title"> {{ headline }}</h1>
     </div>

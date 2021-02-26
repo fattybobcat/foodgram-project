@@ -18,6 +18,17 @@
     </div>
     <div class="card__footer">
         <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
-        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+        {% if request.user.is_authenticated %}
+            <div class="single-card__favorite">
+                {% if recipe|get_is_favorite:request.user %}
+                    <button class="button button_style_none" name="favorites">
+                        <span class="icon-favorite icon-favorite_active"></span></button>
+                {% else %}
+                    <button class="button button_style_none" name="favorites" data-out>
+                        <span class="icon-favorite"></span></button>
+                {% endif %}
+            </div>
+        {% endif %}
+
     </div>
 </div>

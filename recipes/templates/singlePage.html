@@ -4,25 +4,35 @@
 {% block head %}
     {% include 'head.html' with index=True%}
 {% endblock %}
+{% block static %}
+    <link rel="stylesheet" href={% static 'pages/single.css' %}>
+{% endblock %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
+
     {% csrf_token %}
     {% load user_filter %}
     {% load recipes_tag_filter %}
-        <div class="single-card" data-id="{{ recipe.id }}">
-            {% if recipe.image %}
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{username.id}}">
+        <!--    {% if recipe.image %} -->
                 <img src="{% get_media_prefix %}{{ recipe.image }}" alt={{ recipe.title }} class="single-card__image">
-            {% else %}
-                <img src="{% static 'images/testCardImg.png' %}" alt="{{ recipe.title }}" class="card__image">
-            {% endif%}
+        <!--        <img src="{{ recipe.image.url }}" alt="Какой-то текст" class="single-card__image">
+           <img src="{{ recipe.image.url }}" alt="какой-то текст" class="single-card__image">
+       --> <!--    {% else %}
+               <img src="{% static 'images/testCardImg.png' %}" alt={{ recipe.title }} class="single-card__image">
+           {% endif%} -->
             <div class="single-card__info">
                 <div class="single-card__header-info">
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
-                    <div class="single-card__favorite">
-                        <button class="button button_style_none" name="favorites" data-out>
-                            <span class="icon-favorite icon-favorite_big"></span>
-                        </button>
-                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                        <div class="single-card__favorite">
+                        {% if request.user.is_authenticated %}
+                            {% if recipe|get_is_favorite:request.user %}
+                               <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
+                            <div class="single-card__favorite-tooltip tooltip">Убрать из избранного</div>
+                            {% else %}
+                                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                            <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
                 <ul class="single-card__items">
@@ -63,22 +73,27 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/components/Purchases.js' %}"></script>
-    {% if request.user.is_authenticated %}
-        <script src="{% static 'js/components/Favorites.js' %}"></script>
-        <script src="{% static 'js/components/Subscribe.js' %}"></script>
-    {% endif %}
     <script src="{% static 'js/config/config.js' %}"></script>
+    {% if request.user.is_authenticated %}
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
 
     <script src="{% static 'js/components/MainCards.js' %}"></script>
     <script src="{% static 'js/components/SingleCard.js' %}"></script>
     <script src="{% static 'js/components/Header.js' %}"></script>
 
     <script src="{% static 'js/api/Api.js' %}"></script>
-    {% if request.user.is_authenticated %}
-            <script src="{% static 'singlePage.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
     {% else %}
-            <script src="{% static 'singlePageNotAuth.js' %}"></script>
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/SingleCard.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'singlePageNotAuth.js' %}"></script>
     {% endif %}
 
 {% endblock %}

@@ -11,7 +11,7 @@ urlpatterns = [
     path('recipes/edit/<int:recipe_id>/delete/', views.recipe_delete, name='recipe_delete'),
     #path('ingredients/', views.Ingredients.as_view(), name='ingredients'),
     path('follow/', views.follow_index, name="follow_index"),
-    path('favorites/', views.favorites, name="favorites"),
+    path('favorite', views.favorite, name="favorite_recipes"),
     path('shopping_list/', views.shopping_list, name="shopping_list"),
 
    # path('<username>/', views.profile, name='profile'),

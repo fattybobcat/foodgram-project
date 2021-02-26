@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.views.generic import View
 from django.shortcuts import get_object_or_404, render, redirect
 from .form import RecipeForm
+from api.models import FavoriteRecipe
 from .models import (
     Ingredient,
     Recipe,
@@ -53,6 +54,7 @@ def new_recipe(request):
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
+            print(recipe.id)
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
                     IngredientAmount,
@@ -61,7 +63,7 @@ def new_recipe(request):
                     ingredients_names[key][0]
                 )
             form.save_m2m()
-            return redirect('index')
+            return redirect('recipe_single', recipe_id=recipe.id)
     form = RecipeForm()
     return render(request,
                   "formRecipe.html",
@@ -146,12 +148,18 @@ def recipe_single(request, recipe_id):
 def shopping_list(request):
     pass
 
-# class FollowClass(LoginRequiredMixin, View):
-#     pass
 
 def follow_index(request):
     pass
 
-def favorites(request):
-    pass
-
+def favorite(request):
+    recipe_list = Recipe.objects.filter(
+        favorite_recipe__user__id=request.user.id).all()
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request,
+                  'favoriteRecipes.html',
+                  {'recipe_list': recipe_list,
+                   'page': page,
+                   'paginator': paginator, })

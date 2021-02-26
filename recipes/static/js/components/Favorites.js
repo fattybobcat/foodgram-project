@@ -1,7 +1,8 @@
 class Favorites {
-    constructor(config, api) {
+    constructor(config, api, csrf_token ) {
         this.config = config;
         this.api = api;
+        this.csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     }
 
     addFavorites (target,cardId,callBack) {
