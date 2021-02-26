@@ -1,8 +1,5 @@
 from django import template
-from django.http import QueryDict
-from django.contrib.auth.decorators import login_required
 
-#from recipes.models import Cart, Favorite
 from api.models import FavoriteRecipe, Follow
 
 register = template.Library()
@@ -15,16 +12,22 @@ def get_recipe_tag(tags_list):
     if 'lunch' in tags_list:
         tags += str('<li class="card__item"><span class="badge badge_style_green">Обед</span></li>')
     if 'dinner' in tags_list:
-        tags += str('<li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>')
+        tags += str(
+            '<li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>'
+        )
     return tags
+
 
 @register.filter
 def get_description_new_lines(description_recipe):
     description_list = description_recipe.split('\n')
     description = ""
     for i in range(len(description_list)):
-        description += str(f'<p class=" single-card__section-text">{description_list[i]}</p>')
+        description += str(
+            f'<p class=" single-card__section-text">{description_list[i]}</p>'
+        )
     return description
+
 
 @register.filter(name='get_filter_values')
 def get_filter_values(value):
@@ -44,13 +47,16 @@ def get_filter_link(request, tag):
 
     return new_request.urlencode()
 
+
 @register.filter
 def get_is_favorite(recipe, user):
     return FavoriteRecipe.objects.filter(user=user, recipe=recipe).exists()
 
+
 @register.filter
 def get_is_follow(recipe, user):
     return Follow.objects.filter(user=user, author=recipe.author).exists()
+
 
 @register.filter
 def get_is_follow2(author, user):

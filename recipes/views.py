@@ -1,36 +1,33 @@
-import json
-from django.core.paginator import Paginator
-from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.shortcuts import get_object_or_404, render, redirect
+
+from api.models import Follow
+
 from .form import RecipeForm
-from api.models import FavoriteRecipe, Follow
-from .models import (
-    Ingredient,
-    Recipe,
-    IngredientAmount,
-)
+from .models import IngredientAmount, Recipe
 
 
 def get_ingredients(request):
-     ing_dict = {}
-     for key in request.POST:
-         if key.startswith('nameIngredient'):
-             value = key[15:]
-             ing_dict[request.POST[key]] = (request.POST['valueIngredient_' + value],
-                                            request.POST['unitsIngredient_' + value]
-                                            )
-     return ing_dict
+    ing_dict = {}
+    for key in request.POST:
+        if key.startswith('nameIngredient'):
+            value = key[15:]
+            ing_dict[request.POST[key]] = (
+                request.POST['valueIngredient_' + value],
+                request.POST['unitsIngredient_' + value]
+            )
+    return ing_dict
 
 
 def index(request):
-    #filters = request.GET.getlist('filters')
-    #if filters:
+    # filters = request.GET.getlist('filters')
+    # if filters:
     #    recipe_list = Recipe.objects.filter(
     #        tags__value__in=filters).distinct()
-    #else:
+    # else:
     #    recipe_list = Recipe.objects.all()
     recipe_list = Recipe.objects.all()
     paginator = Paginator(recipe_list, 6)
@@ -75,12 +72,12 @@ def new_recipe(request):
                    }
                   )
 
-class  EditRecipe(View):
+
+class EditRecipe(View):
     """ Form for Edit Recipe """
 
     def get(self, request, recipe_id):
         headline = "Редактирование рецепта"
-        button = "Редактировать рецепт"
         print(request)
         recipe = get_object_or_404(Recipe, id=recipe_id)
         ingredients = recipe.amounts.all()
@@ -90,19 +87,21 @@ class  EditRecipe(View):
         form = RecipeForm(instance=recipe)
 
         return render(request,
-                  "editRecipe.html",
-                  context={'form': form,
-                           'headline': headline,
-                           'recipe': recipe,
-                           'ingredients': ingredients}
-                  )
+                      "editRecipe.html",
+                      context={'form': form,
+                               'headline': headline,
+                               'recipe': recipe,
+                               'ingredients': ingredients}
+                      )
 
     def post(self, request, recipe_id):
         headline = "Редактирование рецепта"
-        print(request)
         ingredients_names = get_ingredients(request)
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+        form = RecipeForm(request.POST or None,
+                          files=request.FILES or None,
+                          instance=recipe,
+                          )
         print(form.data)
         if request.user != recipe.author:
             return redirect('index')
@@ -124,7 +123,7 @@ class  EditRecipe(View):
                       {'id': recipe.id,
                        'headline': headline,
                        'recipe': recipe,
-                       'ingredients': ingredients,
+                       'ingredients': ingredients_names,
                        }
                       )
 
@@ -135,6 +134,7 @@ def recipe_delete(request, recipe_id):
     if recipe.author == request.user:
         recipe.delete()
     return render(request, 'deleteRecipeDone.html')
+
 
 def recipe_single(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
@@ -162,14 +162,14 @@ def profile(request, username):
                    }
                   )
 
+
 def shopping_list(request):
     shop_list = Recipe.objects.filter(
         wishlist_recipe__user__id=request.user.id).all()
     print(shop_list)
     return render(request,
                   'wishlist.html',
-                  {'shop_list': shop_list,
-                    }
+                  {'shop_list': shop_list, }
                   )
 
 
@@ -185,9 +185,7 @@ def follow_index(request):
                   {'follow_list': follow_list,
                    'page': page,
                    'paginator': paginator, }
-                 )
-
-
+                  )
 
 
 def favorite(request):
@@ -202,11 +200,14 @@ def favorite(request):
                    'page': page,
                    'paginator': paginator, })
 
+
 def about(request):
     return render(request, "about.html")
 
+
 def tech(request):
     return render(request, "technologii.html")
+
 
 def page_not_found(request, exception):
     return render(request, "404.html", {"path": request.path}, status=404)
@@ -214,4 +215,3 @@ def page_not_found(request, exception):
 
 def server_error(request):
     return render(request, "500.html", status=500)
-

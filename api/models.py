@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from recipes.models import Recipe
 
+from recipes.models import Recipe
 
 User = get_user_model()
 
@@ -27,6 +27,7 @@ class Follow(models.Model):
     def __str__(self):
         return f'User: {self.user}, author: {self.author}'
 
+
 class FavoriteRecipe(models.Model):
     """Favorite recipes"""
     user = models.ForeignKey(User,
@@ -40,6 +41,7 @@ class FavoriteRecipe(models.Model):
                                related_name="favorite_recipe",
                                verbose_name="Избранный рецепт",
                                )
+
 
 class Wishlist(models.Model):
     """List wishlist ingredient of recipes"""

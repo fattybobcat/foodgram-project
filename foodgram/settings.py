@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
 from dotenv import load_dotenv
+
 load_dotenv()
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 
@@ -35,8 +37,6 @@ ALLOWED_HOSTS = ["localhost",
                  ]
 
 
-
-# Application definition
 SITE_ID = 1
 INSTALLED_APPS = [
     'recipes',
@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-if DEBUG == True and not os.environ.get("DBTrue"):
+if DEBUG is True and not os.environ.get("DBTrue"):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -156,8 +156,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/auth/login/'
-LOGIN_REDIRECT_URL='/'
-LOGOUT_REDIRECT_URL='/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
