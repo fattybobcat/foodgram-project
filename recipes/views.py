@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-
-from api.models import Follow
+from django.http import HttpResponse
+from api.models import Follow, Wishlist
 
 from .form import RecipeForm
 from .models import IngredientAmount, Recipe
@@ -166,11 +166,29 @@ def profile(request, username):
 def shopping_list(request):
     shop_list = Recipe.objects.filter(
         wishlist_recipe__user__id=request.user.id).all()
-    print(shop_list)
     return render(request,
-                  'wishlist.html',
+                  'shopList.html',
                   {'shop_list': shop_list, }
                   )
+
+
+def download_wishlist(request):
+    recipes_shop_list = Recipe.objects.filter(wishlist_recipe__user__id=request.user.id).all()
+    ingredient_list = IngredientAmount.objects.filter(recipe__in=recipes_shop_list)
+    summary = []
+    ingredients = {}
+    for item in ingredient_list:
+        if item.ingredient in ingredients.keys():
+            ingredients[item.ingredient] += item.amount
+        else:
+            ingredients[item.ingredient] = item.amount
+    for ing, amount in ingredients.items():
+        summary.append('{} - {} {} \n'.format(ing.title, amount, ing.dimension))
+    response = HttpResponse(
+        summary, content_type='application/text charset=utf-8'
+    )
+    response['Content-Disposition'] = 'attachment; filename="ShoppingList.txt"'
+    return response
 
 
 def follow_index(request):

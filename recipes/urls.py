@@ -25,8 +25,11 @@ urlpatterns = [
     path('shopping_list/',
          views.shopping_list,
          name="shopping_list"),
-    path('tech', views.tech, name='tech'),
+    path('shopping_list/download',
+         views.download_wishlist,
+         name="download_wishlist"),
     path('about', views.about, name='about'),
+    path('tech', views.tech, name='tech'),
 
     path('<username>/', views.profile, name='profile'),
 ]
