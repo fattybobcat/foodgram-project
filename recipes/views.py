@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 from django.http import HttpResponse
 from api.models import Follow, Wishlist
-
+from django.db.models import Q
 from .form import RecipeForm
 from .models import IngredientAmount, Recipe
 
@@ -23,19 +23,25 @@ def get_ingredients(request):
 
 
 def index(request):
-    # filters = request.GET.getlist('filters')
-    # if filters:
-    #    recipe_list = Recipe.objects.filter(
-    #        tags__value__in=filters).distinct()
+    tags_list = request.GET.getlist("tag")
+    #tags_list = tag_list #tag_list[0].split("__")
+    print("TEST INDEX TAGS!", tags_list)
+    if tags_list:
+        recipe_list1 = Recipe.objects.filter(Q(tags__icontains="lunch")&Q(tags__icontains="breakfast")).distinct()
+        tags_list = tags_list[0].split("__")
+        print("tttttt")
+        # wishlist_recipe__user__id=request.user.id
     # else:
     #    recipe_list = Recipe.objects.all()
+        print("recipe_list1", recipe_list1)
     recipe_list = Recipe.objects.all()
-    paginator = Paginator(recipe_list, 6)
-    page_number = request.GET.get('page')
+    paginator = Paginator(recipe_list1, 6)
+    page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', {'recipe_list': recipe_list,
-                                          'page': page,
-                                          'paginator': paginator, })
+    return render(request, "index.html", {"recipe_list": recipe_list,
+                                          "tags_list": tags_list,
+                                          "page": page,
+                                          "paginator": paginator, })
 
 
 def new_recipe(request):
@@ -43,16 +49,12 @@ def new_recipe(request):
     headline = "Создание рецепта"
     button = "Создать рецепт"
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-    print(form.data)
     ingredients_names = get_ingredients(request)
-    print("ingredietn", ingredients_names)
     if request.method == "POST":
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
-            print(recipe.id)
-            print('test', ingredients_names)
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
                     IngredientAmount,
@@ -60,7 +62,6 @@ def new_recipe(request):
                     key,
                     ingredients_names[key][0]
                 )
-            print("3sssss")
             form.save_m2m()
             return redirect('recipe_single', recipe_id=recipe.id)
     form = RecipeForm()
@@ -75,17 +76,13 @@ def new_recipe(request):
 
 class EditRecipe(View):
     """ Form for Edit Recipe """
-
     def get(self, request, recipe_id):
         headline = "Редактирование рецепта"
-        print(request)
         recipe = get_object_or_404(Recipe, id=recipe_id)
         ingredients = recipe.amounts.all()
-        print("2", ingredients)
         if request.user != recipe.author:
             return redirect('index')
         form = RecipeForm(instance=recipe)
-
         return render(request,
                       "editRecipe.html",
                       context={'form': form,
@@ -102,7 +99,6 @@ class EditRecipe(View):
                           files=request.FILES or None,
                           instance=recipe,
                           )
-        print(form.data)
         if request.user != recipe.author:
             return redirect('index')
         if form.is_valid():
@@ -115,7 +111,6 @@ class EditRecipe(View):
                     key,
                     ingredients_names[key][0]
                 )
-            print(ingredients_names)
             return redirect('recipe_single', recipe_id=recipe_id)
 
         return render(request,
@@ -139,7 +134,6 @@ def recipe_delete(request, recipe_id):
 def recipe_single(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = recipe.amounts.all()
-    print(ingredients)
     return render(request, "singlePage.html",
                   {"recipe": recipe,
                    "ingredients": ingredients,
@@ -194,7 +188,6 @@ def download_wishlist(request):
 def follow_index(request):
     follow_list = Follow.objects.filter(
         user__id=request.user.id).all()
-    print(follow_list)
     paginator = Paginator(follow_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)

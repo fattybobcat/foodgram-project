@@ -29,7 +29,7 @@ def get_description_new_lines(description_recipe):
     return description
 
 
-@register.filter(name='get_filter_values')
+@register.filter
 def get_filter_values(value):
     return value.getlist('filters')
 
@@ -65,3 +65,27 @@ def get_is_follow2(author, user):
 @register.filter
 def is_shop(recipe, user):
     return Wishlist.objects.filter(user=user, recipe=recipe).exists()
+
+@register.filter
+def get_tags(request, tag):
+    if "tag" in request.GET:
+        print("request.GET", request.GET)
+        print('0 error')
+        tag_list = request.GET["tag"]
+        print('1 error')
+        print("tag_list", tag_list)
+        print('2 error')
+        tag_list = tag_list.split("__")
+        if not tag in tag_list:
+            tag_list.append(tag)
+            print('3-1', tag_list)
+        else:
+            tag_list.remove(tag)
+            print('3-2', tag_list)
+        if "" in tag_list:
+            tag_list.remove("")
+            print('4-2', tag_list)
+        result = "__".join(tag_list)
+        print("result", result)
+        return result
+    return tag

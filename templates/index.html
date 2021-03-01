@@ -7,9 +7,26 @@
 {% endblock head %}
 {% block content %}
     {% csrf_token %}
+    {% load recipes_tag_filter %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
         <div class="main__header">
             <h1 class="main__title">Рецепты</h1>
+            {{tags_list}}
+            <ul class="tags">
+            <li class="tags__item">
+                <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange {% if 'breakfast' in tags_list %}tags__checkbox_active{% endif %}" href="{{ request.path }}?tag={{ request|get_tags:"breakfast" }}"></a>
+                <span class="tags__label">Завтрак</span>
+            </li>
+            <li class="tags__item">
+                <a id="lunch" class="tags__checkbox tags__checkbox_style_green {% if 'lunch' in tags_list %}tags__checkbox_active{% endif %}" href="{{ request.path }}?tag={{ request|get_tags:"lunch" }}"></a>
+                <span for="lunch" class="tags__label">Обед</span>
+            </li>
+            <li class="tags__item">
+                <a id="dinner" class="tags__checkbox tags__checkbox_style_purple {% if 'dinner' in tags_list %}tags__checkbox_active{% endif %}" href="{{ request.path }}?tag={{ request|get_tags:"dinner" }}"></a>
+                <label for="dinner" class="tags__label">Ужин</label>
+            </li>
+        </ul>
+            <!--
             <ul class="tags">
                 <li class="tags__item">
                     <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
@@ -23,7 +40,7 @@
                     <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
                     <label for="dinner" class="tags__label">Ужин</label>
                 </li>
-            </ul>
+            </ul>-->
         </div>
         <div class="card-list">
             {% for i in page %}

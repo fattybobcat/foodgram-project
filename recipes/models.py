@@ -6,19 +6,19 @@ User = get_user_model()
 
 
 TAG_CHOICES = [
-        ('breakfast', 'Завтрак'),
-        ('lunch', 'Обед'),
-        ('dinner', 'Ужин'),
+        ("breakfast", "Завтрак"),
+        ("lunch", "Обед"),
+        ("dinner", "Ужин"),
     ]
 
 
-class Tag(models.Model):
-    title = models.CharField(max_length=255)
-    color = models.CharField(max_length=255)
-    value = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.title
+# class Tag(models.Model):
+#     title = models.CharField(max_length=255)
+#     color = models.CharField(max_length=255)
+#     value = models.CharField(max_length=255)
+#
+#     def __str__(self):
+#         return self.title
 
 
 class Ingredient(models.Model):
