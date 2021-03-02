@@ -99,7 +99,8 @@ if DEBUG is True and not os.environ.get("DBTrue"):
 else:
     DATABASES = {
         'default': {
-            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+            'ENGINE': os.environ.get('DB_ENGINE',
+                                     'django.db.backends.postgresql'),
             'NAME': os.environ.get('DB_NAME'),
             'USER': os.environ.get('POSTGRES_USER'),
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),

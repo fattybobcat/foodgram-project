@@ -19,7 +19,7 @@ urlpatterns = [
     path('follow/',
          views.follow_index,
          name="follow_index"),
-    path('favorite',
+    path('favorite/',
          views.favorite,
          name="favorite_recipes"),
     path('shopping_list/',
@@ -28,8 +28,8 @@ urlpatterns = [
     path('shopping_list/download',
          views.download_wishlist,
          name="download_wishlist"),
-    path('about', views.about, name='about'),
-    path('tech', views.tech, name='tech'),
+    path('about/', views.about, name='about'),
+    path('tech/', views.tech, name='tech'),
 
     path('<username>/', views.profile, name='profile'),
 ]

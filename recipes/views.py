@@ -1,47 +1,32 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.http import HttpResponse
-from api.models import Follow, Wishlist
-from django.db.models import Q
+
+from api.models import Follow
+
+from .auxiliary import get_ingredients, tag_collect
 from .form import RecipeForm
 from .models import IngredientAmount, Recipe
 
 
-def get_ingredients(request):
-    ing_dict = {}
-    for key in request.POST:
-        if key.startswith('nameIngredient'):
-            value = key[15:]
-            ing_dict[request.POST[key]] = (
-                request.POST['valueIngredient_' + value],
-                request.POST['unitsIngredient_' + value]
-            )
-    return ing_dict
-
-
 def index(request):
-    tags_list = request.GET.getlist("tag")
-    #tags_list = tag_list #tag_list[0].split("__")
-    print("TEST INDEX TAGS!", tags_list)
-    if tags_list:
-        recipe_list1 = Recipe.objects.filter(Q(tags__icontains="lunch")&Q(tags__icontains="breakfast")).distinct()
-        tags_list = tags_list[0].split("__")
-        print("tttttt")
-        # wishlist_recipe__user__id=request.user.id
-    # else:
-    #    recipe_list = Recipe.objects.all()
-        print("recipe_list1", recipe_list1)
-    recipe_list = Recipe.objects.all()
-    paginator = Paginator(recipe_list1, 6)
+    tags, tags_filter = tag_collect(request)
+    if tags_filter:
+        recipe_list = Recipe.objects.filter(tags_filter).distinct()
+    else:
+        recipe_list = Recipe.objects.all()
+    paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
-    return render(request, "index.html", {"recipe_list": recipe_list,
-                                          "tags_list": tags_list,
-                                          "page": page,
-                                          "paginator": paginator, })
+    return render(request,
+                  "index.html",
+                  {"tags": tags,
+                   "page": page,
+                   "paginator": paginator, }
+                  )
 
 
 def new_recipe(request):
@@ -143,7 +128,15 @@ def recipe_single(request, recipe_id):
 
 def profile(request, username):
     username = get_object_or_404(User, username=username)
-    recipes = Recipe.objects.filter(author=username)
+    tags, tags_filter = tag_collect(request)
+    if tags_filter:
+        recipes = Recipe.objects.filter(
+            tags_filter
+            ).filter(
+            author=username
+            ).distinct()
+    else:
+        recipes = Recipe.objects.filter(author=username)
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -153,6 +146,7 @@ def profile(request, username):
                    'page': page,
                    'paginator': paginator,
                    'username': username,
+                   "tags": tags,
                    }
                   )
 
@@ -167,8 +161,10 @@ def shopping_list(request):
 
 
 def download_wishlist(request):
-    recipes_shop_list = Recipe.objects.filter(wishlist_recipe__user__id=request.user.id).all()
-    ingredient_list = IngredientAmount.objects.filter(recipe__in=recipes_shop_list)
+    recipes_shop_list = Recipe.objects.filter(
+        wishlist_recipe__user__id=request.user.id).all()
+    ingredient_list = IngredientAmount.objects.filter(
+        recipe__in=recipes_shop_list)
     summary = []
     ingredients = {}
     for item in ingredient_list:
@@ -177,7 +173,9 @@ def download_wishlist(request):
         else:
             ingredients[item.ingredient] = item.amount
     for ing, amount in ingredients.items():
-        summary.append('{} - {} {} \n'.format(ing.title, amount, ing.dimension))
+        summary.append('{} - {} {} \n'.format(
+            ing.title, amount, ing.dimension)
+        )
     response = HttpResponse(
         summary, content_type='application/text charset=utf-8'
     )
@@ -200,8 +198,14 @@ def follow_index(request):
 
 
 def favorite(request):
-    recipe_list = Recipe.objects.filter(
-        favorite_recipe__user__id=request.user.id).all()
+    tags, tags_filter = tag_collect(request)
+    if tags_filter:
+        recipe_list = Recipe.objects.filter(
+            tags_filter).filter(
+            favorite_recipe__user__id=request.user.id).distinct()
+    else:
+        recipe_list = Recipe.objects.filter(
+            favorite_recipe__user__id=request.user.id).all()
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -209,7 +213,10 @@ def favorite(request):
                   'favoriteRecipes.html',
                   {'recipe_list': recipe_list,
                    'page': page,
-                   'paginator': paginator, })
+                   'paginator': paginator,
+                   "tags": tags,
+                   }
+                  )
 
 
 def about(request):

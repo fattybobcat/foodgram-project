@@ -1,4 +1,5 @@
 import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -14,7 +15,9 @@ def ingredient_hints(request):
     text = request.GET.get("query").lower()
     ing_list = Ingredient.objects.filter(title__startswith=text
                                          ).order_by('title')
-    result = [{"title": item.title, "dimension": item.dimension} for item in ing_list]
+    result = [
+        {"title": item.title, "dimension": item.dimension} for item in ing_list
+    ]
     return JsonResponse(result, safe=False)
 
 
