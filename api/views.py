@@ -13,7 +13,7 @@ from .models import FavoriteRecipe, Follow, Wishlist
 
 def ingredient_hints(request):
     text = request.GET.get("query").lower()
-    ing_list = Ingredient.objects.filter(title__startswith=text
+    ing_list = Ingredient.objects.filter(title__istartswith=text
                                          ).order_by('title')
     result = [
         {"title": item.title, "dimension": item.dimension} for item in ing_list

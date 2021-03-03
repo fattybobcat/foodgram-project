@@ -2,7 +2,7 @@
 {% block title %} Список покупок {% endblock title %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with shopping_list=True%}
+    {% include 'includes/head.html' with shopping_list=True%}
 {% endblock %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">

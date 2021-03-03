@@ -40,7 +40,7 @@ class Ingredient(models.Model):
 
 class IngredientAmount(models.Model):
     """Ингредиенты в рецепте"""
-    amount = models.IntegerField(default=1,
+    amount = models.PositiveIntegerField(default=1,
                                  verbose_name="Количество",
                                  )
     ingredient = models.ForeignKey(Ingredient,

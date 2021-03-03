@@ -10,7 +10,7 @@ from api.models import Follow
 from .auxiliary import get_ingredients, tag_collect
 from .form import RecipeForm
 from .models import IngredientAmount, Recipe
-
+from foodgram.settings import COUNT_RECIPE
 
 def index(request):
     tags, tags_filter = tag_collect(request)
@@ -18,7 +18,7 @@ def index(request):
         recipe_list = Recipe.objects.filter(tags_filter).distinct()
     else:
         recipe_list = Recipe.objects.all()
-    paginator = Paginator(recipe_list, 6)
+    paginator = Paginator(recipe_list, COUNT_RECIPE)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(request,
@@ -137,7 +137,7 @@ def profile(request, username):
             ).distinct()
     else:
         recipes = Recipe.objects.filter(author=username)
-    paginator = Paginator(recipes, 6)
+    paginator = Paginator(recipes, COUNT_RECIPE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request,
@@ -186,7 +186,7 @@ def download_wishlist(request):
 def follow_index(request):
     follow_list = Follow.objects.filter(
         user__id=request.user.id).all()
-    paginator = Paginator(follow_list, 6)
+    paginator = Paginator(follow_list, COUNT_RECIPE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request,
@@ -224,7 +224,7 @@ def about(request):
 
 
 def tech(request):
-    return render(request, "technologii.html")
+    return render(request, "tech.html")
 
 
 def page_not_found(request, exception):

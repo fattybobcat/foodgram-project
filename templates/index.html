@@ -2,7 +2,7 @@
 {% block title %} Foodgram - лучшие рецепты {% endblock title %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with index=True%}
+    {% include 'includes/head.html' with index=True%}
 {% endblock head %}
 {% block content %}
     {% csrf_token %}

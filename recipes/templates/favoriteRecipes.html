@@ -2,7 +2,7 @@
 {% block title %} Избранные рецепты {% endblock title %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with favorite=True%}
+    {% include 'includes/head.html' with favorite=True%}
 {% endblock %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">

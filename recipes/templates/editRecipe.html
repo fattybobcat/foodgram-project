@@ -2,7 +2,7 @@
 {% block title %} Редактирование рецепта {% endblock %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with new_recipe=True%}
+    {% include 'includes/head.html' with new_recipe=True%}
 {% endblock %}
 {% load static %}
 {% block content %}
@@ -31,18 +31,7 @@
             <div class="form__group">
             <p class="form__label">Теги</p>
             <div class="form__field-group">
-                <!--{{ form.tags.value_from_datadict }}
-                {{ recipe.tags }}
-                ------------------------------
-                {{ form.tags }}
-                {{ recipe.tags}}
-                -------
-                {% if "breakfast" in recipe.tags %}
-                    -jujym
-                {% endif %}
-                --------------------- -->
                 <div class="tags">
-
                     <div class="tags__item">
                         <input type="checkbox" name="tags" value="breakfast" id="id_breakfast"
                             class="tags__checkbox tags__checkbox_style_orange" {% if "breakfast" in  recipe.tags %}checked{% endif %}>

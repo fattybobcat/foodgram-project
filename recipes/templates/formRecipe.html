@@ -2,7 +2,7 @@
 {% block title %} Создание рецепта {% endblock %}
 {% load static %}
 {% block head %}
-    {% include 'head.html' with recipe_new=True%}
+    {% include 'includes/head.html' with recipe_new=True%}
 {% endblock %}
 {% block static %}
     <link rel="stylesheet" href={% static 'pages/form.css' %}>

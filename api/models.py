@@ -22,7 +22,11 @@ class Follow(models.Model):
                                )
 
     class Meta:
-        unique_together = [["user", "author"]]
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'], name='unique_subscription'),
+        ]
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
 
     def __str__(self):
         return f'User: {self.user}, author: {self.author}'
@@ -41,15 +45,23 @@ class FavoriteRecipe(models.Model):
                                related_name="favorite_recipe",
                                verbose_name="Избранный рецепт",
                                )
-
+    class Meta:
+        verbose_name = "Избранный рецепт"
+        verbose_name_plural = "Избранные рецепты"
 
 class Wishlist(models.Model):
     """List wishlist ingredient of recipes"""
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              related_name="wishlist_subscriber",
+                             verbose_name="Пользователь",
                              )
     recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
                                related_name="wishlist_recipe",
+                               verbose_name="Список для покупок ",
                                )
+
+    class Meta:
+        verbose_name = "Список"
+        verbose_name_plural = "Списки"
