@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from multiselectfield import MultiSelectField
+from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 
@@ -10,15 +11,6 @@ TAG_CHOICES = [
         ("lunch", "Обед"),
         ("dinner", "Ужин"),
     ]
-
-
-# class Tag(models.Model):
-#     title = models.CharField(max_length=255)
-#     color = models.CharField(max_length=255)
-#     value = models.CharField(max_length=255)
-#
-#     def __str__(self):
-#         return self.title
 
 
 class Ingredient(models.Model):
@@ -53,9 +45,8 @@ class IngredientAmount(models.Model):
                                )
 
     def add_ingredient(self, recipe_id, title, amount):
-        print('test3i', title, amount)
+
         ingredient, create = Ingredient.objects.get_or_create(title=title)
-        print("title", ingredient)
         return self.objects.get_or_create(recipe_id=recipe_id,
                                           ingredient=ingredient,
                                           amount=amount)
