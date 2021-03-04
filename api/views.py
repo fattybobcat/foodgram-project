@@ -24,14 +24,19 @@ def ingredient_hints(request):
 class BaseView(View):
     model = None
     item_id = None
+    model_get = None
+    item_get = None
+    filter_kwargs = {'key': 'value'}
+    fields = (None,)
 
-    def post(self, request):
+    def post(self, request, filter_kwargs):
         req = json.loads(request.body)
         self.item_id = req.get("id", None)
         if self.item_id:
-            recipe = get_object_or_404(Recipe, id=self.item_id)
+            self.item_get = get_object_or_404(self.model_get, id=self.item_id)
+            self.filter_kwargs[self.fields[0]] = self.item_get
             obj, created = self.model.objects.get_or_create(
-                user=request.user, recipe=recipe
+                **self.filter_kwargs
             )
             if created:
                 return JsonResponse({"success": True})
@@ -39,102 +44,56 @@ class BaseView(View):
         return JsonResponse({"success": False}, status=400)
 
     def delete(self, request, id):
-        recipe = get_object_or_404(
-            self.model, recipe=id, user=request.user
+        self.item_get = get_object_or_404(
+            self.model, **self.filter_kwargs
         )
-        recipe.delete()
+        self.item_get.delete()
         return JsonResponse({"success": True})
+
 
 class FavoriteApi(LoginRequiredMixin, BaseView):
     model = FavoriteRecipe
+    model_get = Recipe
+    fields = ('recipe',)
+
+    def post(self, request):
+        self.filter_kwargs = {'user': request.user,
+                              'recipe': self.item_get, }
+        return super(FavoriteApi, self).post(request, self.filter_kwargs)
+
+    def delete(self, request, id):
+        self.filter_kwargs = {'user': request.user,
+                              'recipe': id, }
+        return super(FavoriteApi, self).delete(request, self.filter_kwargs)
 
 
 class SubscriptionApi(LoginRequiredMixin, BaseView):
     model = Follow
+    model_get = User
+    fields = ('author',)
+
     def post(self, request):
-        req = json.loads(request.body)
-        author_id = req.get("id", None)
-        if author_id:
-            author = get_object_or_404(User, id=author_id)
-            obj, created = Follow.objects.get_or_create(
-                user=request.user,
-                author=author
-            )
-            if created:
-                return JsonResponse({"success": True})
-            return JsonResponse({"success": False})
-        return JsonResponse({"success": False}, status=400)
+        self.filter_kwargs = {'user': request.user,
+                              'author': self.item_get, }
+        return super(SubscriptionApi, self).post(request, self.filter_kwargs)
 
     def delete(self, request, id):
-        subscript = get_object_or_404(
-            Follow, author=id, user=request.user
-        )
-        subscript.delete()
-        return JsonResponse({"success": True})
+        self.filter_kwargs = {'user': request.user,
+                              'author': id, }
+        return super(SubscriptionApi, self).delete(request, self.filter_kwargs)
 
 
-# class FavoriteApi(LoginRequiredMixin, View):
-#     def post(self, request):
-#         req = json.loads(request.body)
-#         recipe_id = req.get("id", None)
-#         if recipe_id:
-#             recipe = get_object_or_404(Recipe, id=recipe_id)
-#             obj, created = FavoriteRecipe.objects.get_or_create(
-#                 user=request.user, recipe=recipe
-#             )
-#             if created:
-#                 return JsonResponse({"success": True})
-#             return JsonResponse({"success": False})
-#         return JsonResponse({"success": False}, status=400)
-#
-#     def delete(self, request, id):
-#         recipe = get_object_or_404(
-#             FavoriteRecipe, recipe=id, user=request.user
-#         )
-#         recipe.delete()
-#         return JsonResponse({"success": True})
+class WishlistApi(BaseView):
+    model = Wishlist
+    model_get = Recipe
+    fields = ('recipe',)
 
-
-class SubscriptionApi(LoginRequiredMixin, View):
     def post(self, request):
-        req = json.loads(request.body)
-        author_id = req.get("id", None)
-        if author_id:
-            author = get_object_or_404(User, id=author_id)
-            obj, created = Follow.objects.get_or_create(
-                user=request.user,
-                author=author
-            )
-            if created:
-                return JsonResponse({"success": True})
-            return JsonResponse({"success": False})
-        return JsonResponse({"success": False}, status=400)
+        self.filter_kwargs = {'user': request.user,
+                              'recipe': self.item_get, }
+        return super(WishlistApi, self).post(request, self.filter_kwargs)
 
     def delete(self, request, id):
-        subscript = get_object_or_404(
-            Follow, author=id, user=request.user
-        )
-        subscript.delete()
-        return JsonResponse({"success": True})
-
-
-class WishlistApi(View):
-    def post(self, request):
-        req = json.loads(request.body)
-        recipe_id = req.get("id", None)
-        if recipe_id:
-            recipe = get_object_or_404(Recipe, id=recipe_id)
-            obj, created = Wishlist.objects.get_or_create(
-                user=request.user, recipe=recipe
-            )
-            if created:
-                return JsonResponse({"success": True})
-            return JsonResponse({"success": False})
-        return JsonResponse({"success": False}, status=400)
-
-    def delete(self, request, id):
-        recipe = get_object_or_404(
-            Wishlist, recipe=id, user=request.user
-        )
-        recipe.delete()
-        return JsonResponse({"success": True})
+        self.filter_kwargs = {'user': request.user,
+                              'recipe': id, }
+        return super(WishlistApi, self).delete(request, self.filter_kwargs)
