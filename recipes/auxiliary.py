@@ -6,11 +6,11 @@ from .models import TAG_CHOICES
 def get_ingredients(request):
     ing_dict = {}
     for key in request.POST:
-        if key.startswith('nameIngredient'):
+        if key.startswith("nameIngredient"):
             value = key[15:]
             ing_dict[request.POST[key]] = (
-                request.POST['valueIngredient_' + value],
-                request.POST['unitsIngredient_' + value]
+                request.POST["valueIngredient_" + value],
+                request.POST["unitsIngredient_" + value]
             )
     return ing_dict
 

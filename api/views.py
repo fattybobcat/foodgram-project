@@ -26,7 +26,7 @@ class BaseView(View):
     item_id = None
     model_get = None
     item_get = None
-    filter_kwargs = {'key': 'value'}
+    filter_kwargs = {"key": "value"}
     fields = (None,)
 
     def post(self, request, filter_kwargs):
@@ -54,46 +54,46 @@ class BaseView(View):
 class FavoriteApi(LoginRequiredMixin, BaseView):
     model = FavoriteRecipe
     model_get = Recipe
-    fields = ('recipe',)
+    fields = ("recipe",)
 
     def post(self, request):
-        self.filter_kwargs = {'user': request.user,
-                              'recipe': self.item_get, }
+        self.filter_kwargs = {"user": request.user,
+                              "recipe": self.item_get, }
         return super(FavoriteApi, self).post(request, self.filter_kwargs)
 
     def delete(self, request, id):
-        self.filter_kwargs = {'user': request.user,
-                              'recipe': id, }
+        self.filter_kwargs = {"user": request.user,
+                              "recipe": id, }
         return super(FavoriteApi, self).delete(request, self.filter_kwargs)
 
 
 class SubscriptionApi(LoginRequiredMixin, BaseView):
     model = Follow
     model_get = User
-    fields = ('author',)
+    fields = ("author",)
 
     def post(self, request):
-        self.filter_kwargs = {'user': request.user,
-                              'author': self.item_get, }
+        self.filter_kwargs = {"user": request.user,
+                              "author": self.item_get, }
         return super(SubscriptionApi, self).post(request, self.filter_kwargs)
 
     def delete(self, request, id):
-        self.filter_kwargs = {'user': request.user,
-                              'author': id, }
+        self.filter_kwargs = {"user": request.user,
+                              "author": id, }
         return super(SubscriptionApi, self).delete(request, self.filter_kwargs)
 
 
 class WishlistApi(BaseView):
     model = Wishlist
     model_get = Recipe
-    fields = ('recipe',)
+    fields = ("recipe",)
 
     def post(self, request):
-        self.filter_kwargs = {'user': request.user,
-                              'recipe': self.item_get, }
+        self.filter_kwargs = {"user": request.user,
+                              "recipe": self.item_get, }
         return super(WishlistApi, self).post(request, self.filter_kwargs)
 
     def delete(self, request, id):
-        self.filter_kwargs = {'user': request.user,
-                              'recipe': id, }
+        self.filter_kwargs = {"user": request.user,
+                              "recipe": id, }
         return super(WishlistApi, self).delete(request, self.filter_kwargs)

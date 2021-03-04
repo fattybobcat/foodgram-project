@@ -21,7 +21,7 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [
         IngredientAmountInline,
     ]
-
+    autocomplete_fields = ["ingredients"]
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("pk", "title", "dimension")

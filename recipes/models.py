@@ -96,7 +96,7 @@ class Recipe(models.Model):
         verbose_name_plural = "Рецепты"
 
     def get_ingredients(self):
-        return '\n'.join(
-            self.ingredient.all().values_list('title', flat=True))
+        return "\n".join(
+            self.ingredient.all().values_list("title", flat=True))
 
-    get_ingredients.short_description = 'Ингредиенты'
+    get_ingredients.short_description = "Ингредиенты"
