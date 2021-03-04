@@ -69,7 +69,9 @@ class EditRecipe(View):
         ingredients = recipe.amounts.all()
         if request.user != recipe.author:
             return redirect('index')
-        form = RecipeForm(instance=recipe)
+        form = RecipeForm(request.POST or None,
+                          files=request.FILES or None,
+                          instance=recipe)
         return render(request,
                       "editRecipe.html",
                       context={'form': form,

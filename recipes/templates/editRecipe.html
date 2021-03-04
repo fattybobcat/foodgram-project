@@ -76,7 +76,8 @@
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                    {{ form.image|addclass:'form__file-button' }}
+                    {{ form.image|addclass:"form__file-button" }}
+                    <span class="form__input-info">При редактировании фотография сохраняется</span>
                     <span class="form__error">{{ form.image.errors }}</span>
                 </div>
             </div>
