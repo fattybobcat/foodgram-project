@@ -23,7 +23,10 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'author'], name='unique_subscription'),
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique_subscription'
+            ),
         ]
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
@@ -45,9 +48,11 @@ class FavoriteRecipe(models.Model):
                                related_name="favorite_recipe",
                                verbose_name="Избранный рецепт",
                                )
+
     class Meta:
         verbose_name = "Избранный рецепт"
         verbose_name_plural = "Избранные рецепты"
+
 
 class Wishlist(models.Model):
     """List wishlist ingredient of recipes"""

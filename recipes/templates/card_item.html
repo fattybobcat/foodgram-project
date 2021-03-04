@@ -1,11 +1,11 @@
 {% load recipes_tag_filter %}
+{% load thumbnail %}
 {% load static %}
 <div class="card" data-id={{ recipe.id }}>
-    {% if recipe.image %}
-        <a href="{% url 'recipe_single' recipe.id %}" class="link" target="_blank"><img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="card__image"></a>
-    {% else %}
-        <a href="{% url 'recipe_single' recipe.id %}" class="link" target="_blank"><img src="{% static 'images/testCardImg.png' %}" alt="{{ recipe.title }}" class="card__image"></a>
-    {% endif %}
+    {% thumbnail recipe.image "480x480" as im %}
+        <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image">
+    {% endthumbnail %}
+
     <div class="card__body">
         <a class="card__title link" href="{% url 'recipe_single' recipe.id %}" target="_blank"> {{ recipe.title }}</a>
         <ul class="card__items">

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'api',
     'django_filters',
     'multiselectfield',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,11 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
+#if DEBUG:
+#    MEDIAFILES_DIRS = [
+#        os.path.join(BASE_DIR, 'media')
+#    ]
+#else:
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/auth/login/'

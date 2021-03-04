@@ -6,11 +6,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from api.models import Follow
+from foodgram.settings import COUNT_RECIPE
 
 from .auxiliary import get_ingredients, tag_collect
 from .form import RecipeForm
 from .models import IngredientAmount, Recipe
-from foodgram.settings import COUNT_RECIPE
+
 
 def index(request):
     tags, tags_filter = tag_collect(request)
@@ -29,6 +30,7 @@ def index(request):
                   )
 
 
+@login_required
 def new_recipe(request):
     """Create new recipe"""
     headline = "Создание рецепта"
@@ -88,6 +90,9 @@ class EditRecipe(View):
             return redirect('index')
         if form.is_valid():
             IngredientAmount.objects.filter(recipe=recipe).delete()
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            recipe.save()
             form.save()
             for key in ingredients_names:
                 IngredientAmount.add_ingredient(
@@ -96,6 +101,7 @@ class EditRecipe(View):
                     key,
                     ingredients_names[key][0]
                 )
+            form.save_m2m()
             return redirect('recipe_single', recipe_id=recipe_id)
 
         return render(request,

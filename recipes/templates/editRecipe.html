@@ -24,75 +24,31 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-
             </div>
-
-
             <div class="form__group">
-            <p class="form__label">Теги</p>
-            <div class="form__field-group">
-                <div class="tags">
-                    <div class="tags__item">
-                        <input type="checkbox" name="tags" value="breakfast" id="id_breakfast"
-                            class="tags__checkbox tags__checkbox_style_orange" {% if "breakfast" in  recipe.tags %}checked{% endif %}>
-                        <label for="id_breakfast" class="tags__label">Завтрак</label>
-                    </div>
-                    <div class="tags__item">
-                        <input type="checkbox" name="tags" value="lunch" id="id_lunch"
-                            class="tags__checkbox tags__checkbox_style_green" {% if "lunch" in  recipe.tags %}checked{% endif %}>
-                        <label for="id_lunch" class="tags__label">Обед</label>
-                    </div>
-                    <div class="tags__item">
-                        <input type="checkbox" name="tags" value="dinner" id="id_dinner"
-                            class="tags__checkbox tags__checkbox_style_purple" {% if "dinner" in recipe.tags %}checked{% endif %}>
-                        <label for="id_dinner" class="tags__label">Ужин</label>
-                    </div>
-                </div>
-                <span class="form__error">{{ form.tags.errors }}</span>
-            </div>
-        </div>
-
-
-
-
-
-            <div class="form__group">
-                <label for="nameIngredient" class="form__label">Ингредиенты</label>
+                <p class="form__label">Теги</p>
                 <div class="form__field-group">
-                    <div class="form__field-group-ingredientes">
-                        <div class="form__dropdown">
-                            <input type="text" id="nameIngredient" class="form__input">
-                            <div class="form__dropdown-items"></div>
+                    <div class="tags">
+                        <div class="tags__item">
+                            <input type="checkbox" name="tags" value="breakfast" id="id_breakfast"
+                                class="tags__checkbox tags__checkbox_style_orange" {% if "breakfast" in  recipe.tags %}checked{% endif %}>
+                            <label for="id_breakfast" class="tags__label">Завтрак</label>
                         </div>
-                        <input type="number" id="cantidad" class="form__input" min="0">
-                        <label for="cantidad" class="form__label" id="cantidadVal">шт.</label>
+                        <div class="tags__item">
+                            <input type="checkbox" name="tags" value="lunch" id="id_lunch"
+                                class="tags__checkbox tags__checkbox_style_green" {% if "lunch" in  recipe.tags %}checked{% endif %}>
+                            <label for="id_lunch" class="tags__label">Обед</label>
+                        </div>
+                        <div class="tags__item">
+                            <input type="checkbox" name="tags" value="dinner" id="id_dinner"
+                                class="tags__checkbox tags__checkbox_style_purple" {% if "dinner" in recipe.tags %}checked{% endif %}>
+                            <label for="id_dinner" class="tags__label">Ужин</label>
+                        </div>
                     </div>
-                    <div class="form__field-group-ingredientes-container">
-                         {% if ingredients %}
-                            {% for ing in ingredients %}
-                                <div id="ing_{{ forloop.counter }}" class="form__field-item-ingredient">
-                                    <span>{{ ing.ingredient.title }} {{ ing.amount }} {{ ing.ingredient.dimension }}</span><span
-                                    class="form__field-item-delete"></span>
-
-                                <input id="nameIngredient_{{ forloop.counter }}"
-                                       name="nameIngredient_{{ forloop.counter }}" type="hidden"
-                                       value="{{ ing.ingredient.title }}">
-
-                                <input id="valueIngredient_{{ forloop.counter }}"
-                                       name="valueIngredient_{{ forloop.counter }}" type="hidden"
-                                       value="{{ ing.amount }}">
-
-                                <input id="unitsIngredient_{{ forloop.counter }}"
-                                       name="unitsIngredient_{{ forloop.counter }}" type="hidden"
-                                       value="{{ ing.ingredient.dimension }}">
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
-                    <span class="form__error"></span>
+                    <span class="form__error">{{ form.tags.errors }}</span>
                 </div>
             </div>
+            {% include 'includes/ingredientFrom.html' %}
 
             <div class="form__group">
                 <label for="form.time.id_for_label" class="form__label">Время приготовления</label>
@@ -120,12 +76,8 @@
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                    {{ form.image|addclass:"form__file-button" }}
-                    {% if form.errors %}
-                        {% for error in field.errors %}
-                            <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
-                    {% endif %}
+                    {{ form.image|addclass:'form__file-button' }}
+                    <span class="form__error">{{ form.image.errors }}</span>
                 </div>
             </div>
             <div class="form__footer">

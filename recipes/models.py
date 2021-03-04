@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from multiselectfield import MultiSelectField
-from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 
@@ -33,8 +32,8 @@ class Ingredient(models.Model):
 class IngredientAmount(models.Model):
     """Ингредиенты в рецепте"""
     amount = models.PositiveIntegerField(default=1,
-                                 verbose_name="Количество",
-                                 )
+                                         verbose_name="Количество",
+                                         )
     ingredient = models.ForeignKey(Ingredient,
                                    on_delete=models.CASCADE,
                                    related_name="amounts"
