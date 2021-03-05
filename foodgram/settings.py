@@ -11,11 +11,7 @@ SECRET_KEY = '1v%g#)q&7ta9sxe9l5)z603@5@%ho8jdxzj930zm2eq8mympwz'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost",
-                 "127.0.0.1",
-                 "[::1]",
-                 "testserver",
-                 ]
+ALLOWED_HOSTS = ['*']
 
 
 SITE_ID = 1
