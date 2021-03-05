@@ -14,14 +14,21 @@ class UserAdmin(BaseUserAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("pk", "title", "time", "description", "pub_date", "author")
+    list_display = ("pk", "title", "time", "description",
+                    "pub_date", "author", "count_favorite",)
     search_fields = ("title",)
     list_filter = ("pub_date", "author",)
     empty_value_display = "-пусто-"
     inlines = [
         IngredientAmountInline,
     ]
-    autocomplete_fields = ["ingredients"]
+    autocomplete_fields = ("ingredients",)
+
+    def count_favorite(self, obj):
+        return obj.favorite_recipe.count()
+
+    count_favorite.short_description = "в избранном кол."
+
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("pk", "title", "dimension")
