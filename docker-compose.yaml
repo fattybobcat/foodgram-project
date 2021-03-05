@@ -12,7 +12,7 @@ services:
       - ./.env
 
   web:
-    image: fattybobcat/foodgram:v1.01
+    image: fattybobcat/foodgram:latest
     restart: always
     depends_on:
       - db
