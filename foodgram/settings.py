@@ -1,15 +1,15 @@
 import os
 
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+#load_dotenv()
+#dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '1v%g#)q&7ta9sxe9l5)z603@5@%ho8jdxzj930zm2eq8mympwz'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -65,25 +65,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 
-if DEBUG is True and not os.environ.get("DBTrue"):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get('DB_ENGINE','django.db.backends.postgresql'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get('DB_ENGINE',
-                                     'django.db.backends.postgresql'),
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT'),
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -121,11 +112,11 @@ if DEBUG:
         os.path.join(BASE_DIR, 'static')
     ]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
