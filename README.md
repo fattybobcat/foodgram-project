@@ -6,6 +6,7 @@ Foodgram-project running across multiple Docker containers. Foodgram allows you 
 workflow yamdb_final
 
 This project will allow you to deploy to your "empty" server - foodgram-project project
+
 [![Foodgram](https://github.com/fattybobcat/foodgram-project/actions/workflows/main.yml/badge.svg)](https://github.com/fattybobcat/foodgram-project/actions/workflows/main.yml)
 
 ## Getting Started
