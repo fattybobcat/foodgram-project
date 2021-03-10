@@ -64,7 +64,7 @@ There is no data in our database now. Need to install migrations and write test 
   ```
   docker cp  fixtures.json <CONTAINER ID>
   ```
-3. To enter the web container (fattybobcat/yamdb:v1.21): run `docker exec -it <CONTAINER ID> bash`
+3. To enter the web container (fattybobcat/foodgram:v1.21): run `docker exec -it <CONTAINER ID> bash`
 4. Make migrate `python manage.py migrate`
 5. To load the database run the commands:
 ```
@@ -83,8 +83,8 @@ python manage.py loaddata fixtures.json
 2. Run the commands: `python manage.py createsuperuser`
 
 ## Site
-[site](http://130.193.41.179)
-http://130.193.41.179/
+[site](http://84.201.177.113)
+http://84.201.177.113/
 
 ## Authors
 Petruk Aleksandr - Python Developer
