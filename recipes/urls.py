@@ -31,5 +31,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("tech/", views.tech, name="tech"),
 
-    path("<username>/", views.profile, name="profile"),
+    path("user/<username>/", views.profile, name="profile"),
 ]

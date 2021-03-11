@@ -12,10 +12,10 @@
     {% csrf_token %}
     {% load user_filter %}
     {% load recipes_tag_filter %}
-        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{recipe.author.id}}">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             {% load thumbnail %}
-            {% thumbnail recipe.image "480x480" as im %}
-                <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image">
+            {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
+                <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image" width="480" height="480">
             {% endthumbnail %}
 
             <div class="single-card__info">
@@ -39,8 +39,11 @@
                 <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ recipe.time }}</p>
                     <ul class="single-card__items">
-                        <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span>
-                            {{ recipe.author.username }}</p></li>
+                        <li class="single-card__item">
+                            <p class="single-card__text"><span class="icon-user"></span>
+                                <a href="{% url 'profile' recipe.author.username %}" style="color: black">{{ recipe.author.username }}</a></p>
+                            </p>
+                        </li>
                         {% if request.user == recipe.author %}
                         <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}" class="single-card__text">Редактировать рецепт</a></li>
                         {% endif %}

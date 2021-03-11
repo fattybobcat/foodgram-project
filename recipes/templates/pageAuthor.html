@@ -11,14 +11,19 @@
     {% load user_filter %}
     {% load recipes_tag_filter %}
         <div class="main__header">
-            <h1 class="main__title"> {{ username.get_full_name }} </h1>
+            {% if item.author.get_full_name %}
+                <h1 class="main__title"> {{ username1.get_full_name }} </h1>
+            {% else %}
+                <h1 class="main__title"> {{ username1 }} </h1>
+            {% endif %}
+            <h1 class="main__title"> {{ username1.get_full_name }} </h1>
             {% include 'tags.html' %}
         </div>
 
-        {% if username != request.user.username %}
-            <div class="author-subscribe" data-author="{{ username.id }}">
-                {% if user.is_authenticated %}
-                    {% if username.id|get_is_follow2:request.user.id %}
+        {% if username1 != request.user.username %}
+            <div class="author-subscribe" data-author="{{ username1.id }}">
+                {% if request.user.is_authenticated %}
+                    {% if username1.id|get_is_follow2:request.user.id %}
                         <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_auto" name="subscribe"><span class="icon-check button__icon"></span>Отписаться от автора </button></p>
                     {% else %}
                         <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button></p>

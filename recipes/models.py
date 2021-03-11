@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from multiselectfield import MultiSelectField
+from django.core.validators import MinValueValidator
 
 User = get_user_model()
 
@@ -44,11 +45,11 @@ class IngredientAmount(models.Model):
                                )
 
     def add_ingredient(self, recipe_id, title, amount):
-
-        ingredient, create = Ingredient.objects.get_or_create(title=title)
-        return self.objects.get_or_create(recipe_id=recipe_id,
-                                          ingredient=ingredient,
-                                          amount=amount)
+        if int(amount) > 0:
+            ingredient, create = Ingredient.objects.get_or_create(title=title)
+            return self.objects.get_or_create(recipe_id=recipe_id,
+                                              ingredient=ingredient,
+                                              amount=amount)
 
 
 class Recipe(models.Model):
@@ -78,7 +79,8 @@ class Recipe(models.Model):
                             null=True,
                             verbose_name="Теги",
                             )
-    time = models.PositiveIntegerField(verbose_name="Время приготовления")
+    time = models.PositiveIntegerField(validators=[MinValueValidator(1)],
+                                       verbose_name="Время приготовления")
     ingredients = models.ManyToManyField(Ingredient,
                                          through=IngredientAmount,
                                          through_fields=("recipe",

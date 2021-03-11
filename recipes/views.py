@@ -51,12 +51,12 @@ def new_recipe(request):
                 )
             form.save_m2m()
             return redirect('recipe_single', recipe_id=recipe.id)
-    form = RecipeForm()
     return render(request,
                   "formRecipe.html",
                   {"form": form,
                    "headline": headline,
                    "button": button,
+
                    }
                   )
 
@@ -153,7 +153,7 @@ def profile(request, username):
                   {'recipes': recipes,
                    'page': page,
                    'paginator': paginator,
-                   'username': username,
+                   'username1': username,
                    "tags": tags,
                    }
                   )

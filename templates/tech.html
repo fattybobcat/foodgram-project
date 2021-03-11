@@ -2,6 +2,9 @@
 {% block title %} Технологии {% endblock %}
 
 {% load static %}
+{% block head %}
+    {% include 'includes/head.html' %}
+{% endblock head %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}

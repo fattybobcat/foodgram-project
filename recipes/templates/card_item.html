@@ -2,8 +2,9 @@
 {% load thumbnail %}
 {% load static %}
 <div class="card" data-id={{ recipe.id }}>
-    {% thumbnail recipe.image "480x480" as im %}
-        <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image">
+    {% thumbnail recipe.image "364x240" crop="center" upscale=True as im %}
+    <a href="{% url 'recipe_single' recipe.id %}" class="link"><img
+            src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
     {% endthumbnail %}
 
     <div class="card__body">
@@ -13,7 +14,8 @@
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{ recipe.time }}</p>
-            <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author.username %}" style="color: black">{{ recipe.author.username }}</a></p>
+            <p class="card__text"><span class="icon-user"></span>
+                <a href="{% url 'profile' recipe.author.username %}" style="color: black">{{ recipe.author.username }}</a></p>
         </div>
     </div>
     <div class="card__footer">

@@ -1,15 +1,15 @@
 import os
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
-# dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv()
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '1v%g#)q&7ta9sxe9l5)z603@5@%ho8jdxzj930zm2eq8mympwz'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -123,12 +123,17 @@ LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ.get('MAIL_SENDER')
-EMAIL_HOST_PASSWORD = os.environ.get('PASSWORD_MAIL_SENDER')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+#EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = os.environ.get('MAIL_SENDER')
+# EMAIL_HOST_PASSWORD = os.environ.get('PASSWORD_MAIL_SENDER')
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# SERVER_EMAIL = EMAIL_HOST_USER
+# DEFAULT_FROM_EMAIL =
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 COUNT_RECIPE = 6
