@@ -31,7 +31,6 @@ class BaseView(View):
 
     def post(self, request, filter_kwargs):
         req = json.loads(request.body)
-        print("req",req)
         self.item_id = req.get("id", None)
         if self.item_id:
             self.item_get = get_object_or_404(self.model_get, id=self.item_id)
