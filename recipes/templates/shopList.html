@@ -2,7 +2,7 @@
 {% block title %} Список покупок {% endblock title %}
 {% load static %}
 {% block head %}
-    {% include 'includes/head.html' with shopping_list=True%}
+    {% include 'includes/head.html' with shopping_list=True %}
 {% endblock %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
@@ -14,7 +14,7 @@
         </div>
         <div class="card-list card-list_column">
             <ul class="shopping-list">
-            {% if counter > 0 %}
+            {% if shop_list %}
                 {% for item in shop_list %}
                     <li class="shopping-list__item" data-id="{{ item.id }}">
                         <div class="recipe recipe_reverse">
