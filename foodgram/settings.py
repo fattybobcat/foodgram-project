@@ -14,7 +14,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 BASE_URL = "84.201.177.113"
-SITE_ID = 2
+SITE_ID = 1
 INSTALLED_APPS = [
     'recipes',
     'users',
