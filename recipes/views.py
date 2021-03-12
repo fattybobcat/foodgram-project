@@ -109,7 +109,8 @@ class EditRecipe(View):
                                    "headline": headline,
                                    "recipe": recipe,
                                    "ingredients": ingredients,
-                                   "error_tag": error_tag,}
+                                   "error_tag": error_tag,
+                                   }
                           )
         if request.user != recipe.author:
             return redirect("index")
@@ -180,6 +181,7 @@ def profile(request, username):
                    "tags": tags,
                    }
                   )
+
 
 @login_required
 def shopping_list(request):
