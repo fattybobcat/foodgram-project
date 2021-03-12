@@ -13,13 +13,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-SITE_ID = 1
+BASE_URL = "84.201.177.113"
+SITE_ID = 2
 INSTALLED_APPS = [
     'recipes',
     'users',
-    'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -125,14 +125,14 @@ LOGOUT_REDIRECT_URL = '/'
 
 
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = os.environ.get('MAIL_SENDER')
-# EMAIL_HOST_PASSWORD = os.environ.get('PASSWORD_MAIL_SENDER')
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# SERVER_EMAIL = EMAIL_HOST_USER
-# DEFAULT_FROM_EMAIL =
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('MAIL_SENDER')
+EMAIL_HOST_PASSWORD = os.environ.get('PASSWORD_MAIL_SENDER')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 COUNT_RECIPE = 6

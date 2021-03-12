@@ -85,7 +85,9 @@ python manage.py loaddata fixtures.json
 ## Site
 [site](http://84.201.177.113)
 http://84.201.177.113/
-
+### Test Admin user
+username: admin
+password: admin 
 ## Authors
 Petruk Aleksandr - Python Developer
 

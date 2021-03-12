@@ -38,25 +38,35 @@ def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     ingredients_names = get_ingredients(request)
     if request.method == "POST":
-        if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
-            for key in ingredients_names:
-                IngredientAmount.add_ingredient(
-                    IngredientAmount,
-                    recipe.id,
-                    key,
-                    ingredients_names[key][0]
-                )
-            form.save_m2m()
-            return redirect('recipe_single', recipe_id=recipe.id)
+        keys_form = [*form.data.keys()]
+        if 'tags' in keys_form:
+            if form.is_valid():
+                recipe = form.save(commit=False)
+                recipe.author = request.user
+                recipe.save()
+                for key in ingredients_names:
+                    IngredientAmount.add_ingredient(
+                        IngredientAmount,
+                        recipe.id,
+                        key,
+                        ingredients_names[key][0]
+                    )
+                form.save_m2m()
+                return redirect('recipe_single', recipe_id=recipe.id)
+        error_tag = "Выберите один из предложенных 'тегов'"
+        return render(request,
+                      "formRecipe.html",
+                      {"form": form,
+                       "headline": headline,
+                       "button": button,
+                       "error_tag": error_tag,
+                       }
+                      )
     return render(request,
                   "formRecipe.html",
                   {"form": form,
                    "headline": headline,
                    "button": button,
-
                    }
                   )
 
@@ -88,8 +98,21 @@ class EditRecipe(View):
                           files=request.FILES or None,
                           instance=recipe,
                           )
+        keys_form = [*form.data.keys()]
+        print(keys_form)
+        if "tags" not in keys_form:
+            ingredients = recipe.amounts.all()
+            error_tag = "Выберите один из предложенных 'тегов'"
+            return render(request,
+                          "editRecipe.html",
+                          context={"form": form,
+                                   "headline": headline,
+                                   "recipe": recipe,
+                                   "ingredients": ingredients,
+                                   "error_tag": error_tag,}
+                          )
         if request.user != recipe.author:
-            return redirect('index')
+            return redirect("index")
         if form.is_valid():
             IngredientAmount.objects.filter(recipe=recipe).delete()
             recipe = form.save(commit=False)
@@ -104,14 +127,14 @@ class EditRecipe(View):
                     ingredients_names[key][0]
                 )
             form.save_m2m()
-            return redirect('recipe_single', recipe_id=recipe_id)
+            return redirect("recipe_single", recipe_id=recipe_id)
 
         return render(request,
                       "singlePage.html",
-                      {'id': recipe.id,
-                       'headline': headline,
-                       'recipe': recipe,
-                       'ingredients': ingredients_names,
+                      {"id": recipe.id,
+                       "headline": headline,
+                       "recipe": recipe,
+                       "ingredients": ingredients_names,
                        }
                       )
 
@@ -121,7 +144,7 @@ def recipe_delete(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if recipe.author == request.user:
         recipe.delete()
-    return render(request, 'deleteRecipeDone.html')
+    return render(request, "deleteRecipeDone.html")
 
 
 def recipe_single(request, recipe_id):
@@ -146,25 +169,33 @@ def profile(request, username):
     else:
         recipes = Recipe.objects.filter(author=username)
     paginator = Paginator(recipes, COUNT_RECIPE)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(request,
-                  'pageAuthor.html',
-                  {'recipes': recipes,
-                   'page': page,
-                   'paginator': paginator,
-                   'username1': username,
+                  "pageAuthor.html",
+                  {"recipes": recipes,
+                   "page": page,
+                   "paginator": paginator,
+                   "username1": username,
                    "tags": tags,
                    }
                   )
 
-
+@login_required
 def shopping_list(request):
-    shop_list = Recipe.objects.filter(
-        wishlist_recipe__user__id=request.user.id).all()
+    user = get_object_or_404(User, username=request.user)
+    shop_list = None
+    print(user)
+    if user.id:
+        shop_list = Recipe.objects.filter(
+            wishlist_recipe__user__id=request.user.id).all()
+        return render(request,
+                      "shopList.html",
+                      {"shop_list": shop_list, }
+                      )
     return render(request,
-                  'shopList.html',
-                  {'shop_list': shop_list, }
+                  "shopList.html",
+                  {"shop_list": shop_list, }
                   )
 
 
@@ -187,7 +218,7 @@ def download_wishlist(request):
     response = HttpResponse(
         summary, content_type='application/text charset=utf-8'
     )
-    response['Content-Disposition'] = 'attachment; filename="ShoppingList.txt"'
+    response["Content-Disposition"] = 'attachment; filename="ShoppingList.txt"'
     return response
 
 
@@ -195,13 +226,13 @@ def follow_index(request):
     follow_list = Follow.objects.filter(
         user__id=request.user.id).all()
     paginator = Paginator(follow_list, COUNT_RECIPE)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(request,
-                  'followPage.html',
-                  {'follow_list': follow_list,
-                   'page': page,
-                   'paginator': paginator, }
+                  "followPage.html",
+                  {"follow_list": follow_list,
+                   "page": page,
+                   "paginator": paginator, }
                   )
 
 
@@ -215,13 +246,13 @@ def favorite(request):
         recipe_list = Recipe.objects.filter(
             favorite_recipe__user__id=request.user.id).all()
     paginator = Paginator(recipe_list, 6)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
     return render(request,
-                  'favoriteRecipes.html',
-                  {'recipe_list': recipe_list,
-                   'page': page,
-                   'paginator': paginator,
+                  "favoriteRecipes.html",
+                  {"recipe_list": recipe_list,
+                   "page": page,
+                   "paginator": paginator,
                    "tags": tags,
                    }
                   )

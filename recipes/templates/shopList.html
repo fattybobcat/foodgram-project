@@ -30,6 +30,7 @@
             {% else %}
                 {% if request.user.is_authenticated %}
                     <h2 class="custom-text-block">Добавьте рецепты в свой список для того, чтобы можно было скачать список ингредиентов для покупки</h2>
+                    <a href="{% url 'index' %}"><button class="button button_style_blue">На главную</button></a>
                 {% else %}
                     <h2 class="custom-text-block">Зарегестрируйтесь, чтобы добавлять рецепты в список покупок</h2>
                 {% endif %}
