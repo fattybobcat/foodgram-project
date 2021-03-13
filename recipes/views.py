@@ -158,6 +158,7 @@ def profile(request, username):
                    }
                   )
 
+
 @login_required()
 def shopping_list(request):
     shop_list = Recipe.objects.filter(
@@ -167,7 +168,8 @@ def shopping_list(request):
     return render(request,
                   "shopList.html",
                   {"shop_list": shop_list,
-                   "shop_list_count": shop_list_count,}
+                   "shop_list_count": shop_list_count,
+                   }
                   )
 
 
