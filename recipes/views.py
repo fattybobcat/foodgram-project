@@ -38,19 +38,30 @@ def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     ingredients_names = get_ingredients(request)
     if request.method == "POST":
-        if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
-            for key in ingredients_names:
-                IngredientAmount.add_ingredient(
-                    IngredientAmount,
-                    recipe.id,
-                    key,
-                    ingredients_names[key][0]
-                )
-            form.save_m2m()
-            return redirect('recipe_single', recipe_id=recipe.id)
+        keys_form = [*form.data.keys()]
+        if 'tags' in keys_form:
+            if form.is_valid():
+                recipe = form.save(commit=False)
+                recipe.author = request.user
+                recipe.save()
+                for key in ingredients_names:
+                    IngredientAmount.add_ingredient(
+                        IngredientAmount,
+                        recipe.id,
+                        key,
+                        ingredients_names[key][0]
+                    )
+                form.save_m2m()
+                return redirect('recipe_single', recipe_id=recipe.id)
+        error_tag = "Выберите один из предложенных 'тегов'"
+        return render(request,
+                      "formRecipe.html",
+                      {"form": form,
+                       "headline": headline,
+                       "button": button,
+                       "error_tag": error_tag,
+                       }
+                      )
     return render(request,
                   "formRecipe.html",
                   {"form": form,
