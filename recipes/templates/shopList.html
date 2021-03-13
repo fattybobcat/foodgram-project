@@ -14,7 +14,7 @@
         </div>
         <div class="card-list card-list_column">
             <ul class="shopping-list">
-            {% if shop_list %}
+            {% if shop_list_count > 0 %}
                 {% for item in shop_list %}
                     <li class="shopping-list__item" data-id="{{ item.id }}">
                         <div class="recipe recipe_reverse">
@@ -30,6 +30,9 @@
             {% else %}
                 {% if request.user.is_authenticated %}
                     <h2 class="custom-text-block">Добавьте рецепты в свой список для того, чтобы можно было скачать список ингредиентов для покупки</h2>
+                    <div class="custom-button-block">
+                        <a href="{% url 'index' %}"><button class="button button_style_blue">Перейти на главную</button></a>
+                    </div>
                 {% else %}
                     <h2 class="custom-text-block">Зарегестрируйтесь, чтобы добавлять рецепты в список покупок</h2>
                 {% endif %}

@@ -158,13 +158,16 @@ def profile(request, username):
                    }
                   )
 
-
+@login_required()
 def shopping_list(request):
     shop_list = Recipe.objects.filter(
         wishlist_recipe__user__id=request.user.id).all()
+    shop_list_count = shop_list.count()
+    print(shop_list_count)
     return render(request,
-                  'shopList.html',
-                  {'shop_list': shop_list, }
+                  "shopList.html",
+                  {"shop_list": shop_list,
+                   "shop_list_count": shop_list_count,}
                   )
 
 

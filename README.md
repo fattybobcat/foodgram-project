@@ -82,6 +82,10 @@ python manage.py loaddata fixtures.json
 1. To enter the web container (fattybobcat/foodgram-project:v1.21): run `docker exec -it <CONTAINER ID> bash`
 2. Run the commands: `python manage.py createsuperuser`
 
+## User for test
+username: admin
+password: admin
+
 ## Site
 [site](http://84.201.177.113)
 http://84.201.177.113/
