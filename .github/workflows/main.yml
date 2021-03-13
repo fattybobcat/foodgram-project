@@ -91,6 +91,8 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo sh -c "cd code; docker-compose down -v"
+            sudo docker rmi fattybobcat/foodgram
+            sudo docker rmi postgres:12.6
             sudo sh -c "cd code; docker-compose up -d"
 
   send_message:

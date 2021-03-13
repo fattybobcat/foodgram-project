@@ -67,7 +67,6 @@ def new_recipe(request):
                   {"form": form,
                    "headline": headline,
                    "button": button,
-
                    }
                   )
 
@@ -95,6 +94,7 @@ class EditRecipe(View):
         headline = "Редактирование рецепта"
         ingredients_names = get_ingredients(request)
         recipe = get_object_or_404(Recipe, id=recipe_id)
+        ingredients = recipe.amounts.all()
         form = RecipeForm(request.POST or None,
                           files=request.FILES or None,
                           instance=recipe,
@@ -102,21 +102,32 @@ class EditRecipe(View):
         if request.user != recipe.author:
             return redirect('index')
         if form.is_valid():
-            IngredientAmount.objects.filter(recipe=recipe).delete()
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
-            form.save()
-            for key in ingredients_names:
-                IngredientAmount.add_ingredient(
-                    IngredientAmount,
-                    recipe.id,
-                    key,
-                    ingredients_names[key][0]
-                )
-            form.save_m2m()
-            return redirect('recipe_single', recipe_id=recipe_id)
-
+            keys_form = [*form.data.keys()]
+            if 'tags' in keys_form:
+                IngredientAmount.objects.filter(recipe=recipe).delete()
+                recipe = form.save(commit=False)
+                recipe.author = request.user
+                recipe.save()
+                form.save()
+                for key in ingredients_names:
+                    IngredientAmount.add_ingredient(
+                        IngredientAmount,
+                        recipe.id,
+                        key,
+                        ingredients_names[key][0]
+                    )
+                form.save_m2m()
+                return redirect('recipe_single', recipe_id=recipe_id)
+            error_tag = "Выберите один из предложенных 'тегов'"
+            return render(request,
+                          "editRecipe.html",
+                          context={"form": form,
+                                   "headline": headline,
+                                   "recipe": recipe,
+                                   "ingredients": ingredients,
+                                   "error_tag": error_tag,
+                                   }
+                          )
         return render(request,
                       "singlePage.html",
                       {'id': recipe.id,
