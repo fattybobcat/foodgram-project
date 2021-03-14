@@ -19,7 +19,7 @@
             {% include 'tags.html' %}
         </div>
 
-        {% if username1 != request.user.username %}
+        {% if username1.username != request.user.username %}
             <div class="author-subscribe" data-author="{{ username1.id }}">
                 {% if request.user.is_authenticated %}
                     {% if username1.id|get_is_follow2:request.user.id %}

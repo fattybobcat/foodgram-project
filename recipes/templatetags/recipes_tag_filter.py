@@ -1,6 +1,7 @@
 from django import template
 
 from api.models import FavoriteRecipe, Follow, Wishlist
+from recipes.models import TAG_CHOICES
 
 register = template.Library()
 
@@ -96,3 +97,9 @@ def set_page(request, value):
     request_object = request.GET.copy()
     request_object["page"] = value
     return request_object.urlencode()
+
+
+@register.filter
+def get_tag_value(tag):
+    """Возвращает значения тега на русском языке"""
+    return dict(TAG_CHOICES)[tag]

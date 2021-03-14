@@ -158,6 +158,9 @@ def recipe_single(request, recipe_id):
 
 def profile(request, username):
     username = get_object_or_404(User, username=username)
+    not_follow = False
+    if username.username == request.user.username:
+        not_follow = True
     tags, tags_filter = tag_collect(request)
     if tags_filter:
         recipes = Recipe.objects.filter(
@@ -177,6 +180,7 @@ def profile(request, username):
                    'paginator': paginator,
                    'username1': username,
                    "tags": tags,
+                   "not_follow": not_follow,
                    }
                   )
 

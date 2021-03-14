@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django_filters',
     'multiselectfield',
     'sorl.thumbnail',
+    'django_admin_multiple_choice_list_filter',
 ]
 
 MIDDLEWARE = [
